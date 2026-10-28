@@ -18,7 +18,7 @@
 </style>
 </head>
 <body>
-<div class="topline">SOMMO / FORMACIÓN INTERNA · V4 DEMO</div>
+<div class="topline">SOMMO / FORMACIÓN INTERNA · V6 PILOTO</div>
 <header class="wrap top">
   <a href="#inicio" class="brand" data-page="home" aria-label="SOMMO Academy inicio">
     <img src="https://cdn.prod.website-files.com/630a7f61ece7db6e1ffb2ff7/68484239fac612f59d2e4f58_Logos%20SOMMO-03%20Brand%20H%20beige.svg" alt="SOMMO Sushi Bar & Cocktails" onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMTAwIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEwMCI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMxMDExMGYiLz48dGV4dCB4PSI1IiB5PSI1MiIgZmlsbD0iI2VjZThkZSIgZm9udC1mYW1pbHk9IkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjYyIiBsZXR0ZXItc3BhY2luZz0iLTMiPlNPTU1PPC90ZXh0Pjx0ZXh0IHg9IjYiIHk9IjgyIiBmaWxsPSIjZWNlOGRlIiBmb250LWZhbWlseT0iQXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtc2l6ZT0iMTciIGxldHRlci1zcGFjaW5nPSIyIj5TVVNISSBCQVIgJmFtcDsgQ09DS1RBSUxTPC90ZXh0Pjwvc3ZnPgo='">
@@ -27,9 +27,9 @@
   <nav class="nav" id="nav" aria-label="Navegación principal">
     <button type="button" data-page="home">Inicio</button>
     <button type="button" data-page="manual">Protocolos de servicio</button>
-    <button type="button" data-page="dashboard">Mis resultados</button>
-    <button type="button" data-page="login" id="accountNav">Iniciar sesión</button>
-    <button type="button" class="nav-outline" data-page="home" data-scroll="evaluaciones">Evaluaciones ↗</button>
+    <button type="button" data-page="staff">Personal</button>
+    <button type="button" data-page="staff" id="accountNav">Acceso personal</button>
+    <button type="button" data-page="dashboard">Gerencia</button><button type="button" class="nav-outline" data-page="home" data-scroll="evaluaciones">Evaluaciones ↗</button>
   </nav>
   <button class="mob-toggle" id="mob-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="Abrir menú">☰</button>
 </header>
@@ -44,45 +44,55 @@
 .auth-note{font-size:12px;line-height:1.8;color:#aaa99e}
 @media(max-width:600px){.accountbox{flex-direction:column;align-items:flex-start}}
 </style>
+<style>
+.save-status{margin:18px 0 0;color:#4b6950;font-family:var(--mono);font-size:11px;letter-spacing:.035em}
+.admin-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:26px 0}
+.admin-grid .panel{padding:24px}.admin-grid .panel h3{font-size:32px}
+.admin-grid input,.admin-grid select{min-width:0}
+.stage button:disabled{opacity:.7;cursor:not-allowed}
+@media(max-width:1000px){.admin-grid{grid-template-columns:1fr}}
+</style>
 <script>
-
-// SOMMO Academy V5.1 — client only holds publishable key, never correct answers.
-// Database performs selection, ownership checks and grading.
-const SUPABASE_URL = 'https://rkhjvngwptnpmgekgopk.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_BTD-FrtW_os2J-4CHkTPrw_LKcIyVzb';
-const client = window.supabase?.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
-const menus = {
- nuevo:{name:'Nuevo ingreso',tag:'01 / DIAGNÓSTICO',head:'Lo que ya sabes.',sub:'18 preguntas sobre servicio, hospitalidad, bebidas y seguridad. No necesitas conocer la carta de SOMMO.',pass:null},
- piso:{name:'Primer día en piso',tag:'02 / OPERACIÓN',head:'Listo para el piso.',sub:'18 preguntas sobre situaciones reales de servicio y protocolos básicos. Antes puedes consultar la guía de servicio.',pass:15},
- recurrente:{name:'Evaluación recurrente',tag:'03 / MENÚ SOMMO',head:'Domina la carta.',sub:'18 preguntas sobre ingredientes, cócteles, vocabulario japonés y destilados, seleccionadas del banco maestro V3.',pass:15}
+// SOMMO Academy V6 — la publishable key no es una credencial privada.
+// Calificacion, bloqueo de reintentos y verificacion de identidad ocurren en Supabase.
+const SUPABASE_URL='https://rkhjvngwptnpmgekgopk.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_BTD-FrtW_os2J-4CHkTPrw_LKcIyVzb';
+const client=window.supabase?.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+const menus={
+ nuevo:{name:'Nuevo ingreso',tag:'01 / DIAGNÓSTICO',head:'Lo que ya sabes.',sub:'18 preguntas sobre servicio, hospitalidad, bebidas y seguridad.',pass:null},
+ piso:{name:'Primer día en piso',tag:'02 / OPERACIÓN',head:'Listo para el piso.',sub:'18 preguntas sobre situaciones reales de servicio y protocolos básicos.',pass:15},
+ recurrente:{name:'Evaluación recurrente',tag:'03 / MENÚ SOMMO',head:'Domina la carta.',sub:'18 preguntas de ingredientes, cócteles, japonés y destilados.',pass:15}
 };
 const main=document.getElementById('main'),nav=document.getElementById('nav'),mob=document.getElementById('mob-toggle');
-let view='home', exam=null, latestResult=null, selectedExamType='nuevo', profile=null, busy=false, recoveryRequested=false;
-const ACADEMY_SITE_URL = 'https://webpagepxm.github.io/sommo-academy-v5/';
 const ESC=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const shuffle=a=>{let b=a.slice();for(let i=b.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b};
-function scrollTop(){window.scrollTo({top:0,behavior:'instant'})}
-function navState(){const x=document.getElementById('accountNav');if(x)x.textContent=profile?'Mi cuenta':'Iniciar sesión'}
+const TYPE=t=>menus[t]?.name||t;
+const siteUrl='https://webpagepxm.github.io/sommo-academy-v5/';
+let view='home',selectedExamType='nuevo',exam=null,latestResult=null,busy=false,
+    staffToken=localStorage.getItem('sommo_staff_token_v6')||'',staffProfile=null,
+    managerReady=false,recovering=false,managerData=null;
+function goTop(){window.scrollTo(0,0)}
+function setError(id,msg){const el=document.getElementById(id);if(el){el.textContent=msg;el.hidden=!msg}}
+function navState(){const el=document.getElementById('accountNav');if(el)el.textContent=staffProfile?'Mi evaluación':'Acceso personal';}
 function navigate(page,opts={}){
-  view=page;nav.classList.remove('open');mob.setAttribute('aria-expanded','false');
-  if(page==='home'){renderHome(); showAccountBanner()}
-  if(page==='manual')renderManual();
-  if(page==='login')renderLogin();
-  if(page==='forgot')renderForgotPassword();
-  if(page==='reset')renderResetPassword();
-  if(page==='dashboard')renderDashboard();
-  if(page==='start')renderStart();
-  if(page==='exam')renderExam();
-  if(page==='results')renderResults();
-  if(!opts.keepScroll)scrollTop();
-  if(opts.scroll)setTimeout(()=>document.getElementById(opts.scroll)?.scrollIntoView({behavior:'smooth'}),60);
-  navState();
+ view=page;nav.classList.remove('open');mob.setAttribute('aria-expanded','false');
+ if(page==='home'){renderHome();showAccountBanner()}
+ else if(page==='manual')renderManual();
+ else if(page==='staff')renderStaff();
+ else if(page==='exam')renderExam();
+ else if(page==='results')renderResults();
+ else if(page==='dashboard')renderManager();
+ else if(page==='recover')renderRecover();
+ else if(page==='reset')renderReset();
+ else if(page==='login')renderStaff();
+ if(!opts.keepScroll)goTop();
+ if(opts.scroll)setTimeout(()=>document.getElementById(opts.scroll)?.scrollIntoView({behavior:'smooth'}),50);
+ navState();
 }
 function showAccountBanner(){
-  const hero=main.querySelector('.hero');if(!hero)return;
-  const account=document.createElement('div');account.className='wrap';
-  account.innerHTML=`<div class="accountbox"><div><strong>${profile?'Sesión: '+ESC(profile.nombre):'Ingresa para presentar los exámenes'}</strong><small>${profile?(profile.es_prueba?'MODO PILOTO · Preguntas pendientes de aprobación':'Tu actividad se guarda en SOMMO Academy'):'Necesitas una cuenta de empleado para guardar resultados en Supabase.'}</small></div><button type="button" data-page="${profile?'dashboard':'login'}">${profile?'Mis resultados →':'Iniciar sesión →'}</button></div>`;
-  hero.before(account);
+ const hero=main.querySelector('.hero');if(!hero)return;
+ const banner=document.createElement('div');banner.className='wrap';
+ banner.innerHTML=`<div class="accountbox"><div><strong>${staffProfile?'Personal: '+ESC(staffProfile.nombre):'Personal de SOMMO · acceso sin correo'}</strong><small>${staffProfile?'Tus respuestas se guardan mientras avanzas. Cerrar la página no reinicia el examen.':'Identifícate con tu código y PIN. Solo la gerencia tiene una cuenta de administrador.'}</small></div><button type="button" data-page="staff">${staffProfile?'Mis evaluaciones →':'Identificarme →'}</button></div>`;
+ hero.before(banner);
 }
 function renderHome(){main.innerHTML=`<div class="wrap hero">
  <div class="hero-left"><div class="hero-main"><div class="eyebrow">KNOWLEDGE · SERVICE · HOSPITALITY</div><h1>Good service.<br><em>By design.</em></h1><p class="lede">Una experiencia de hospitalidad comienza con personas preparadas. Aprende, practica y evalúa tu conocimiento de servicio y nuestra carta.</p><div class="hero-actions"><button class="text-btn" data-page="home" data-scroll="evaluaciones">Explorar evaluaciones <span aria-hidden="true">↗</span></button><button class="ghost-link" data-page="manual">Leer protocolos de servicio</button></div></div><div class="hero-caption"><span>TRAINING PROGRAM / 2026</span><span>PUERTO ESCONDIDO, OAXACA</span></div></div>
@@ -108,143 +118,216 @@ function renderManual(){main.innerHTML=`<div class="wrap screen manual"><button 
  </article><div class="actions-row"><button data-start="piso">Practicar · primer día en piso ↗</button><button data-page="home">Volver a las evaluaciones</button></div></div>`}
 
 
-function renderLogin(){
-  main.innerHTML=`<div class="wrap screen"><button class="back" data-page="home">← Volver al inicio</button><div class="eyebrow" style="margin-top:20px">ACCESO / PERSONAL</div><h1 class="intro-title">Inicia<br><em>sesión.</em></h1><p class="intro-lede">Usa el correo y contraseña del empleado creado en Supabase Authentication.</p><div class="intro-panel"><form class="panel" id="loginForm"><h3>${profile?'Tu cuenta':'Accede a Academy'}</h3>${profile?`<p>Sesión activa: <strong>${ESC(profile.nombre)}</strong></p><button type="button" class="wide-btn" id="logout">Cerrar sesión →</button>`:`<div class="field"><label for="mail">Correo electrónico</label><input id="mail" type="email" autocomplete="email" required placeholder="tu@correo.com"></div><div class="field"><label for="pass">Contraseña</label><input id="pass" type="password" autocomplete="current-password" required placeholder="Tu contraseña"></div><div style="height:22px"></div><button class="wide-btn" type="submit" id="loginBtn">Entrar a Academy <span>↗</span></button><button type="button" class="ghost-link" data-page="forgot" style="border:0;background:none;color:#e7e0d0;margin-top:17px;cursor:pointer">Olvidé mi contraseña ↗</button>`}<p class="auth-error" id="authError" hidden></p></form><aside class="panel"><span class="pill">ACCESO SEGURO</span><div class="tip-list"><div class="tip"><b>Tu identidad, vinculada a tus resultados.</b><br>Al ingresar, SOMMO reconoce el perfil de empleado registrado.</div><div class="tip"><b>Exámenes seguros.</b><br>El navegador recibe preguntas, pero la clave de respuestas permanece en Supabase.</div><div class="tip"><b>Datos privados.</b><br>Solo podrás consultar tu propio historial. El panel gerencial se habilitará más adelante.</div></div></aside></div></div>`;
-  document.getElementById('logout')?.addEventListener('click',async()=>{await client.auth.signOut();profile=null;exam=null;latestResult=null;navigate('home')});
-  document.getElementById('loginForm').addEventListener('submit',async e=>{
-    e.preventDefault();const b=document.getElementById('loginBtn'),err=document.getElementById('authError');
-    b.disabled=true;b.textContent='Entrando…';err.hidden=true;
-    try{
-      if(!client)throw Error('No se cargó Supabase. Revisa la conexión a internet.');
-      const {error}=await client.auth.signInWithPassword({email:document.getElementById('mail').value.trim(),password:document.getElementById('pass').value});
-      if(error)throw error;
-      const {data,error:perr}=await client.rpc('sommo_mi_perfil');
-      if(perr)throw perr;
-      profile=data;navigate('home');
-    }catch(ex){err.textContent='No se pudo entrar: '+(ex.message||String(ex));err.hidden=false;}
-    finally{b.disabled=false;b.textContent='Entrar a Academy ↗'}
-  });
+function renderStaff(){
+ const profile=staffProfile;
+ main.innerHTML=`<div class="wrap screen"><button class="back" data-page="home">← Volver al inicio</button><div class="eyebrow" style="margin-top:20px">PERSONAL / ACCESO A EVALUACIONES</div><h1 class="intro-title">${profile?'Mis':'Antes de'}<br><em>${profile?'evaluaciones.':'comenzar.'}</em></h1><p class="intro-lede">${profile?'Tus evaluaciones están vinculadas a tu código. Cada intento se guarda en Supabase y no puede reiniciarse por recargar la página.':'Identifícate con el código que te asignó gerencia y tu PIN de seis números. No necesitas correo ni cuenta de usuario.'}</p>
+ ${profile?`<div class="accountbox"><div><strong>${ESC(profile.nombre)}</strong><small>${ESC(profile.codigo)} · Cada evaluación solo puede iniciarse una vez.</small></div><button id="staffLogout">Salir de este dispositivo ↗</button></div><div id="assignmentArea" style="margin-top:30px"><p class="auth-note">Cargando tus evaluaciones…</p></div>`:
+ `<div class="intro-panel"><form class="panel" id="staffLogin"><h3>Identificación personal</h3><div class="field"><label for="staffCode">Código de empleado</label><input id="staffCode" autocomplete="username" placeholder="SOMMO-001" maxlength="32" required autocapitalize="characters"></div><div class="field"><label for="staffPin">PIN personal (6 números)</label><input id="staffPin" type="password" inputmode="numeric" pattern="[0-9]{6}" autocomplete="off" maxlength="6" placeholder="••••••" required></div><button class="wide-btn" id="staffLoginBtn" type="submit">Ver mis evaluaciones <span>↗</span></button><p class="auth-error" id="staffError" hidden></p></form><aside class="panel"><span class="pill">EXAMEN SIN REINICIOS</span><div class="tip-list"><div class="tip"><b>Un intento por asignación.</b><br>Si sales, vuelves al mismo examen.</div><div class="tip"><b>Respuestas guardadas.</b><br>Se registra cada selección al tocarla.</div><div class="tip"><b>Un nuevo intento solo con autorización.</b><br>Gerencia puede asignar una segunda oportunidad.</div></div></aside></div>`}</div>`;
+ if(profile){
+   document.getElementById('staffLogout')?.addEventListener('click',async()=>{
+     try{await client.rpc('sommo_personal_salir',{p_token:staffToken})}catch{};
+     localStorage.removeItem('sommo_staff_token_v6');staffToken='';staffProfile=null;exam=null;navigate('staff');
+   });
+   loadAssignments();
+ }else{
+   document.getElementById('staffLogin').addEventListener('submit',async e=>{
+     e.preventDefault();if(busy)return;busy=true;
+     const b=document.getElementById('staffLoginBtn');b.disabled=true;b.textContent='Comprobando…';setError('staffError','');
+     try{
+       const {data,error}=await client.rpc('sommo_personal_ingresar',{
+         p_codigo:document.getElementById('staffCode').value.trim(),
+         p_pin:document.getElementById('staffPin').value.trim()});
+       if(error)throw error;
+       if(data?.error)throw Error(data.error);
+       if(!data?.token)throw Error('El servidor no devolvió una sesión. Comprueba que instalaste el SQL V6.');
+       staffToken=data.token;localStorage.setItem('sommo_staff_token_v6',staffToken);
+       staffProfile={nombre:data.nombre,codigo:data.codigo};navigate('staff');
+     }catch(ex){setError('staffError',ex.message||'No se pudo identificar.');}
+     finally{busy=false;b.disabled=false;b.textContent='Ver mis evaluaciones ↗';}
+   });
+ }
 }
-// Solicitar un enlace de recuperación para la URL pública exacta del sitio.
-function renderForgotPassword(){
-  main.innerHTML=`<div class="wrap screen"><button class="back" data-page="login">← Volver al acceso</button><div class="eyebrow" style="margin-top:20px">ACCESO / RECUPERACIÓN</div><h1 class="intro-title">Recuperar<br><em>acceso.</em></h1><p class="intro-lede">Te enviaremos un enlace a tu correo. Abre el correo más reciente: los enlaces anteriores pueden caducar.</p><div class="intro-panel"><form class="panel" id="forgotForm"><h3>Tu correo.</h3><div class="field"><label for="forgotMail">Correo del empleado</label><input id="forgotMail" type="email" autocomplete="email" required placeholder="tu@correo.com"></div><button class="wide-btn" type="submit" id="forgotBtn">Enviar enlace de recuperación <span>↗</span></button><p class="auth-error" id="forgotError" hidden></p><p class="auth-note" id="forgotSuccess" hidden>Si existe una cuenta con este correo, recibirás instrucciones para recuperar el acceso. Revisa también la carpeta de spam.</p></form><aside class="panel"><span class="pill">RECUPERACIÓN SEGURA</span><div class="tip-list"><div class="tip"><b>No compartas tus enlaces.</b><br>El enlace de recuperación es personal y temporal.</div><div class="tip"><b>El proyecto conserva tus exámenes.</b><br>Cambiar tu contraseña no elimina el historial de resultados.</div></div></aside></div></div>`;
-  document.getElementById('forgotForm').addEventListener('submit',async e=>{
-    e.preventDefault();const b=document.getElementById('forgotBtn'),err=document.getElementById('forgotError');b.disabled=true;err.hidden=true;b.textContent='Enviando…';
-    try{
-      if(!client)throw Error('No se cargó Supabase.');
-      const {error}=await client.auth.resetPasswordForEmail(document.getElementById('forgotMail').value.trim(),{redirectTo:ACADEMY_SITE_URL});
-      if(error)throw error;
-      document.getElementById('forgotSuccess').hidden=false;
-    }catch(ex){err.textContent='No se pudo solicitar: '+(ex.message||String(ex));err.hidden=false;}
-    finally{b.disabled=false;b.textContent='Enviar enlace de recuperación ↗'}
-  });
+async function loadAssignments(){
+ const dest=document.getElementById('assignmentArea');if(!dest)return;
+ try{
+   const {data,error}=await client.rpc('sommo_personal_evaluaciones',{p_token:staffToken});if(error)throw error;
+   if(view!=='staff')return;
+   staffProfile={nombre:data.nombre,codigo:data.codigo};
+   const assignments=(data.evaluaciones||[]);
+   dest.innerHTML=assignments.length?`<div class="cards">${assignments.map(a=>{
+      const status=a.estado==='finalizado'?'FINALIZADO':a.estado==='en_curso'?'EN CURSO':'PENDIENTE';
+      return `<article class="stage" style="min-height:260px"><div><div class="stagehead"><span>${ESC(a.periodo)} · INTENTO ${a.numero}</span><span>${status}</span></div><h3>${ESC(TYPE(a.tipo))}</h3><p>${a.estado==='finalizado'?`${a.aciertos}/18 aciertos · examen cerrado`:a.estado==='en_curso'?'Tienes un examen comenzado: continuarás donde lo dejaste.':'18 preguntas. Al comenzar se fijan tus preguntas y su orden.'}</p></div><button ${a.estado==='finalizado'?'disabled':''} data-assignment="${ESC(a.id)}">${a.estado==='finalizado'?'Evaluación completada':a.estado==='en_curso'?'Continuar el mismo examen ↗':'Comenzar evaluación ↗'}</button></article>`;
+   }).join('')}</div>`:`<div class="panel"><h3>No tienes evaluaciones asignadas.</h3><p class="auth-note">Pide a gerencia que te asigne un examen desde su panel. No puedes crear intentos por tu cuenta.</p></div>`;
+ }catch(ex){
+   if(/vencido|sesión|Identificate/i.test(ex.message)){localStorage.removeItem('sommo_staff_token_v6');staffToken='';staffProfile=null;exam=null;navigate('staff');return}
+   dest.innerHTML=`<p class="auth-error">${ESC(ex.message||'No se pudieron cargar las evaluaciones.')}</p>`;
+ }
 }
-
-function renderResetPassword(){
-  main.innerHTML=`<div class="wrap screen"><div class="eyebrow" style="margin-top:20px">ACCESO / NUEVA CONTRASEÑA</div><h1 class="intro-title">Cambia tu<br><em>contraseña.</em></h1><p class="intro-lede">Has llegado desde tu enlace de recuperación. Elige una contraseña nueva y guárdala en un gestor de contraseñas.</p><div class="intro-panel"><form class="panel" id="resetForm"><h3>Nuevo acceso.</h3><div class="field"><label for="newPass">Contraseña nueva (mínimo 10 caracteres)</label><input id="newPass" type="password" autocomplete="new-password" minlength="10" required></div><div class="field"><label for="repeatPass">Confirmar contraseña</label><input id="repeatPass" type="password" autocomplete="new-password" minlength="10" required></div><button class="wide-btn" type="submit" id="resetBtn">Guardar nueva contraseña <span>↗</span></button><p class="auth-error" id="resetError" hidden></p></form><aside class="panel"><span class="pill">ACCESO PERSONAL</span><div class="tip-list"><div class="tip"><b>La contraseña solo la escribes aquí.</b><br>No la compartas por WhatsApp ni en el chat.</div><div class="tip"><b>No cambia tu registro.</b><br>Seguirás teniendo el mismo perfil de empleado y tus resultados.</div></div></aside></div></div>`;
-  document.getElementById('resetForm').addEventListener('submit',async e=>{
-    e.preventDefault();const b=document.getElementById('resetBtn'),err=document.getElementById('resetError');err.hidden=true;
-    const p=document.getElementById('newPass').value,again=document.getElementById('repeatPass').value;
-    if(p!==again){err.hidden=false;err.textContent='Las contraseñas no coinciden.';return;}
-    b.disabled=true;b.textContent='Guardando…';
-    try{
-      if(!client)throw Error('No se cargó Supabase.');
-      const {error}=await client.auth.updateUser({password:p});
-      if(error)throw error;
-      // Nunca dejar tokens del enlace de recuperación en la barra de direcciones.
-      if(location.hash)history.replaceState(null,'',location.pathname+location.search);
-      recoveryRequested=false;
-      const {data,error:perr}=await client.rpc('sommo_mi_perfil');
-      if(!perr&&data)profile=data;
-      main.innerHTML=`<div class="wrap screen"><div class="eyebrow">ACCESO / LISTO</div><h1 class="intro-title">Contraseña<br><em>actualizada.</em></h1><p class="intro-lede">Ya puedes entrar a SOMMO Academy con tu contraseña nueva.</p><div class="actions-row"><button data-page="${profile?'home':'login'}">${profile?'Ir a mi Academy':'Iniciar sesión'} ↗</button></div></div>`;
-      navState();
-    }catch(ex){err.hidden=false;err.textContent='No se pudo guardar: '+(ex.message||String(ex));}
-    finally{b.disabled=false;b.textContent='Guardar nueva contraseña ↗'}
-  });
-}
-
-function renderStart(){
-  if(!profile){navigate('login');return}
-  const d=menus[selectedExamType];
-  main.innerHTML=`<div class="wrap screen"><button class="back" data-page="home" data-scroll="evaluaciones">← Volver a evaluaciones</button><div class="eyebrow" style="margin-top:20px">${d.tag}</div><h1 class="intro-title">${d.head}</h1><p class="intro-lede">${d.sub}</p><div class="intro-panel"><form class="panel" id="examForm"><h3>Antes de comenzar.</h3><p>Empleado: <strong>${ESC(profile.nombre)}</strong></p><p class="auth-note">Puesto: ${ESC(profile.puesto||'No especificado')}</p><p class="auth-note">18 preguntas seleccionadas en Supabase. Cada respuesta se calificará en la base de datos al finalizar.</p><p class="auth-error" id="examError" hidden></p><div style="height:25px"></div><button class="wide-btn" type="submit" id="startButton">Iniciar examen <span>↗</span></button></form><aside class="panel"><span class="pill">18 PREGUNTAS · SIN CRONÓMETRO</span><div class="tip-list"><div class="tip"><b>Una respuesta por pregunta.</b><br>Puedes regresar y corregir antes de terminar.</div><div class="tip"><b>Orden distinto cada intento.</b><br>No se repiten familias de conocimiento.</div><div class="tip"><b>${profile.es_prueba?'Modo piloto.':'Contenido en validación.'}</b><br>${profile.es_prueba?'Estás realizando una prueba técnica; SOMMO aún debe aprobar las preguntas.':'La gerencia determinará el criterio final de aprobación.'}</div></div>${selectedExamType==='piso'?`<button class="text-btn" style="margin-top:25px" data-page="manual">Antes, leer protocolos ↗</button>`:''}</aside></div></div>`;
-  document.getElementById('examForm').addEventListener('submit',async e=>{
-    e.preventDefault();if(busy)return;busy=true;
-    const btn=document.getElementById('startButton'),errorBox=document.getElementById('examError');btn.disabled=true;btn.textContent='Preparando preguntas…';
-    try{
-      const {data,error}=await client.rpc('sommo_iniciar_examen',{p_tipo:selectedExamType});
-      if(error)throw error;
-      if(!data||!Array.isArray(data.preguntas)||data.preguntas.length!==18)throw Error('No se recibieron 18 preguntas.');
-      exam={id:data.intento_id,type:selectedExamType,name:profile.nombre,items:data.preguntas.map(q=>({...q,options:shuffle(q.opciones.map(o=>({label:o.texto,original:o.id})))})),answers:Array(18).fill(null),index:0};
-      navigate('exam');
-    }catch(ex){errorBox.textContent='No se pudo iniciar: '+(ex.message||String(ex));errorBox.hidden=false;}
-    finally{busy=false;btn.disabled=false;btn.textContent='Iniciar examen ↗'}
-  });
+async function openAssignment(id){
+ if(busy)return;busy=true;const button=document.querySelector(`[data-assignment="${id}"]`);
+ if(button){button.disabled=true;button.textContent='Abriendo…'}
+ try{
+   const {data,error}=await client.rpc('sommo_personal_abrir',{p_token:staffToken,p_asignacion:id});if(error)throw error;
+   if(!data?.preguntas||data.preguntas.length!==18)throw Error('No llegaron las 18 preguntas.');
+   exam={id:data.intento_id,assignment:id,type:data.tipo,periodo:data.periodo,
+      name:staffProfile.nombre,index:Math.max(0,data.preguntas.findIndex(q=>!q.seleccion)),items:data.preguntas};
+   navigate('exam');
+ }catch(ex){alert(ex.message||'No se pudo abrir el examen');if(view==='staff')loadAssignments()}
+ finally{busy=false;if(button)button.disabled=false}
 }
 function renderExam(){
-  if(!exam){navigate('home');return}
-  const i=exam.index,q=exam.items[i],answered=exam.answers.filter(x=>x!==null).length;
-  main.innerHTML=`<div class="wrap screen"><button class="back" id="leaveExam">← Salir del examen</button><div class="exam-head"><div><div class="eyebrow">${ESC(menus[exam.type].name)} · ${ESC(exam.name)}</div><h1 style="font:400 42px var(--serif);margin:15px 0 0">Evaluación en curso.</h1></div><span class="mono">${answered} DE 18 RESPONDIDAS</span></div><div class="progress-track"><div class="progress-fill" style="width:${answered/18*100}%"></div></div><section class="question-card"><div class="q-top"><span class="mono">PREGUNTA ${String(i+1).padStart(2,'0')} / 18</span><span class="mono">${ESC(q.categoria)}</span></div><h2>${ESC(q.pregunta)}</h2><div class="options" role="radiogroup" aria-label="Opciones de respuesta">${q.options.map((o,j)=>`<button type="button" class="option ${exam.answers[i]===o.original?'selected':''}" data-answer="${ESC(o.original)}" role="radio" aria-checked="${exam.answers[i]===o.original}"><span class="letter">${'ABCD'[j]}</span><span>${ESC(o.label)}</span></button>`).join('')}</div></section><div class="exam-actions"><button type="button" data-step="previous" ${i===0?'disabled':''}>← Anterior</button><span class="mono muted">${i+1} / 18</span><button type="button" class="primary" id="nextStep" data-step="next" ${exam.answers[i]===null?'disabled':''}>${i===17?'Finalizar examen':'Siguiente →'}</button></div><p class="auth-error" id="finishError" hidden></p></div>`;
-  document.getElementById('leaveExam').addEventListener('click',()=>{if(confirm('¿Salir del examen? El intento quedará sin terminar.')){exam=null;navigate('home')}});
+ if(!exam){navigate('staff');return}
+ const i=exam.index,q=exam.items[i],answered=exam.items.filter(x=>x.seleccion!==null).length;
+ main.innerHTML=`<div class="wrap screen"><button class="back" id="leaveExam">← Salir (sin reiniciar)</button><div class="exam-head"><div><div class="eyebrow">${ESC(TYPE(exam.type))} · ${ESC(exam.name)} · ${ESC(exam.periodo)}</div><h1 style="font:400 42px var(--serif);margin:15px 0 0">Tu examen continúa.</h1></div><span class="mono">${answered} DE 18 GUARDADAS</span></div><div class="progress-track"><div class="progress-fill" style="width:${answered/18*100}%"></div></div><section class="question-card"><div class="q-top"><span class="mono">PREGUNTA ${String(i+1).padStart(2,'0')} / 18</span><span class="mono">${ESC(q.categoria)}</span></div><h2>${ESC(q.pregunta)}</h2><div class="options" role="radiogroup" aria-label="Opciones de respuesta">${q.opciones.map((o,j)=>`<button type="button" class="option ${q.seleccion===o.id?'selected':''}" data-answer="${ESC(o.id)}" role="radio" aria-checked="${q.seleccion===o.id}"><span class="letter">${'ABCD'[j]}</span><span>${ESC(o.texto)}</span></button>`).join('')}</div><p class="save-status" id="saveStatus">${q.seleccion?'✓ Respuesta guardada en Supabase':'Selecciona una respuesta. Se guardará automáticamente.'}</p></section><div class="exam-actions"><button data-step="previous" ${i===0?'disabled':''}>← Anterior</button><span class="mono muted">${i+1} / 18</span><button class="primary" id="nextStep" data-step="next" ${q.seleccion===null?'disabled':''}>${i===17?"Finalizar examen":"Siguiente →"}</button></div><p class="auth-error" id="finishError" hidden></p><p class="auth-note">Actualizar o cerrar esta página no crea un examen nuevo. Gerencia debe autorizar cualquier segundo intento.</p></div>`;
+ const n=document.getElementById('nextStep');if(i===17)n.textContent=answered===18?'Entregar examen':'Ir a preguntas pendientes';
+ document.getElementById('leaveExam').addEventListener('click',()=>{exam=null;navigate('staff')});
+}
+async function saveAnswer(answer){
+ if(!exam||busy)return;busy=true;
+ const idx=exam.index,q=exam.items[idx];
+ document.querySelectorAll('[data-answer]').forEach(b=>b.disabled=true);
+ const st=document.getElementById('saveStatus');if(st)st.textContent='Guardando en Supabase…';
+ try{
+   const {error}=await client.rpc('sommo_personal_responder',{
+      p_token:staffToken,p_intento:exam.id,p_pregunta:q.id,p_opcion:answer});
+   if(error)throw error;
+   q.seleccion=answer;renderExam();
+ }catch(ex){
+   if(st){st.textContent='Error al guardar. Reintenta tu respuesta: '+(ex.message||'Error de conexión');st.style.color='#fdb9aa'}
+   document.querySelectorAll('[data-answer]').forEach(b=>b.disabled=false);
+ }finally{busy=false}
 }
 async function finishExam(){
-  if(!exam||exam.answers.some(x=>x===null)||busy)return;busy=true;
-  const b=document.getElementById('nextStep'),err=document.getElementById('finishError');b.disabled=true;b.textContent='Guardando y calificando…';
-  try{
-    const payload={};exam.items.forEach((q,i)=>{payload[q.id]=exam.answers[i]});
-    const {data,error}=await client.rpc('sommo_finalizar_examen',{p_intento:exam.id,p_respuestas:payload});
-    if(error)throw error;
-    const reviews=new Map(data.revision.map(x=>[x.id,x]));
-    latestResult={type:exam.type,name:exam.name,score:data.porcentaje,correct:data.aciertos,total:18,details:exam.items.map(q=>{let r=reviews.get(q.id);return {...r,selectedText:q.options.find(o=>o.original===r.seleccion)?.label||r.seleccion}})};
-    exam=null;navigate('results');
-  }catch(ex){err.hidden=false;err.textContent='No se pudo guardar: '+(ex.message||String(ex))+'. Tus respuestas siguen aquí: vuelve a intentar.';}
-  finally{busy=false;if(b){b.disabled=false;b.textContent='Finalizar examen'}}
+ if(!exam||busy)return;
+ if(exam.items.some(x=>!x.seleccion)){const ix=exam.items.findIndex(x=>!x.seleccion);exam.index=ix;renderExam();return}
+ if(!confirm('¿Entregar este examen? Después no podrás modificarlo ni reiniciarlo.'))return;
+ busy=true;const b=document.getElementById('nextStep');b.disabled=true;b.textContent='Calificando en Supabase…';
+ try{
+   const {data,error}=await client.rpc('sommo_personal_finalizar',{p_token:staffToken,p_intento:exam.id});
+   if(error)throw error;
+   latestResult={...data,name:exam.name,type:exam.type,periodo:exam.periodo};exam=null;navigate('results');
+ }catch(ex){setError('finishError','No se pudo entregar: '+(ex.message||String(ex)));b.disabled=false;b.textContent='Entregar examen'}
+ finally{busy=false}
 }
 function renderResults(){
-  if(!latestResult){navigate('dashboard');return}
-  const r=latestResult,pass=menus[r.type].pass,msg=pass===null?'Resultado diagnóstico':r.correct>=pass?'Buen avance':'Temas por reforzar';
-  main.innerHTML=`<div class="wrap screen"><div class="eyebrow">RESULTADO / ${ESC(menus[r.type].name)}</div><h1 class="intro-title">Cada respuesta<br><em>enseña algo.</em></h1><div class="results-hero"><div><span class="mono">${ESC(r.name)}</span><h2 style="font:400 41px var(--serif);margin:14px 0 8px">${msg}</h2><div class="result-meta">${r.correct} respuestas correctas de 18 · Guardado en Supabase</div></div><div class="score">${r.score}<span style="font-size:29px">%</span></div></div><p class="result-note">${pass===null?'Este examen es diagnóstico: no existe una calificación reprobatoria.':'La meta orientativa es 15 de 18 aciertos, sujeta a validación interna.'} ${profile?.es_prueba?'Este resultado corresponde al piloto técnico.':''}</p><div class="actions-row"><button data-retry="${r.type}">Repetir con otras preguntas ↗</button><button data-page="dashboard">Ver mi historial</button><button data-page="home">Volver al inicio</button></div><h2 style="font:400 46px var(--serif);margin-top:44px">Revisión de respuestas</h2><div class="review">${r.details.map((item,i)=>`<details><summary><span>${i+1}. ${ESC(item.pregunta)}</span><strong class="${item.acierto?'right':'wrong'}">${item.acierto?'Correcta':'Por revisar'}</strong></summary><p><strong>Tu respuesta:</strong> ${ESC(item.selectedText)}<br><strong>Respuesta correcta:</strong> ${ESC(item.respuesta_correcta)}</p></details>`).join('')}</div></div>`;
+ if(!latestResult){navigate('staff');return}
+ const r=latestResult;
+ main.innerHTML=`<div class="wrap screen"><div class="eyebrow">EVALUACIÓN ENTREGADA / ${ESC(TYPE(r.type))}</div><h1 class="intro-title">Un intento.<br><em>Un resultado.</em></h1><div class="results-hero"><div><span class="mono">${ESC(r.name)} · ${ESC(r.periodo)}</span><h2 style="font:400 41px var(--serif);margin:14px 0 8px">Evaluación finalizada.</h2><div class="result-meta">${r.aciertos} de 18 respuestas correctas · Guardado en Supabase</div></div><div class="score">${r.porcentaje}<span style="font-size:29px">%</span></div></div><p class="result-note">Este intento quedó cerrado. Solo gerencia puede asignar otro. Por seguridad, el banco de respuestas no se muestra a los participantes; pide retroalimentación a tu encargado.</p><div class="actions-row"><button data-page="staff">Mis evaluaciones →</button><button data-page="home">Volver al inicio</button></div></div>`;
 }
-async function renderDashboard(){
-  if(!profile){navigate('login');return}
-  main.innerHTML=`<div class="wrap screen"><button class="back" data-page="home">← Volver al inicio</button><div class="eyebrow" style="margin-top:20px">EMPLEADO / HISTORIAL PERSONAL</div><h1 class="intro-title">Mis<br><em>resultados.</em></h1><p class="intro-lede">Estos resultados están guardados en Supabase y pertenecen solamente a tu usuario.</p><div class="manager-warning">PILOTO TÉCNICO: el panel gerencial privado todavía no está habilitado.</div><p id="loadingHistory">Cargando tu historial…</p><div id="myHistory"></div></div>`;
-  const {data,error}=await client.rpc('sommo_mis_resultados');
-  if(view!=='dashboard')return;
-  const dest=document.getElementById('myHistory');document.getElementById('loadingHistory').hidden=true;
-  if(error){dest.textContent='No se pudo cargar el historial: '+error.message;return}
-  const h=Array.isArray(data)?data:[];
-  dest.innerHTML=`<div class="manager-stats"><div class="manager-stat"><b>${h.length}</b><small>EXÁMENES FINALIZADOS</small></div><div class="manager-stat"><b>${h.length?Math.round(h.reduce((n,x)=>n+Number(x.porcentaje),0)/h.length):0}%</b><small>PROMEDIO</small></div><div class="manager-stat"><b>${ESC(profile.nombre)}</b><small>EMPLEADO</small></div></div><div class="table-scroll">${h.length?`<table class="results-table"><thead><tr><th>FECHA</th><th>EVALUACIÓN</th><th>ACIERTOS</th><th>CALIFICACIÓN</th></tr></thead><tbody>${h.map(x=>`<tr><td>${ESC(new Date(x.fecha).toLocaleString('es-MX'))}</td><td>${ESC(menus[x.tipo]?.name||x.tipo)}</td><td>${x.aciertos}/18</td><td>${x.porcentaje}%</td></tr>`).join('')}</tbody></table>`:`<div class="empty">Todavía no has terminado ningún examen.</div>`}</div>`;
+function renderManager(){
+ main.innerHTML=`<div class="wrap screen"><button class="back" data-page="home">← Volver al inicio</button><div class="eyebrow" style="margin-top:20px">GERENCIA / ACCESO PRIVADO</div><h1 class="intro-title">Control de<br><em>evaluaciones.</em></h1><p class="intro-lede">La gerencia es la única que inicia sesión con una cuenta de Supabase. Puede registrar empleados, asignar nuevos intentos y ver resultados.</p>
+ ${managerReady?`<div class="accountbox"><div><strong>Acceso gerencial autorizado</strong><small>Las acciones del panel se verifican desde Supabase.</small></div><button id="managerLogout">Cerrar sesión ↗</button></div><div id="managerPanel" style="margin-top:30px"><p class="auth-note">Cargando panel…</p></div>`:
+ `<div class="intro-panel"><form class="panel" id="managerLogin"><h3>Acceso del gerente</h3><div class="field"><label for="adminEmail">Correo de gerencia</label><input id="adminEmail" type="email" autocomplete="email" placeholder="gerencia@correo.com" required></div><div class="field"><label for="adminPass">Contraseña</label><input id="adminPass" type="password" autocomplete="current-password" required></div><button class="wide-btn" id="managerBtn" type="submit">Entrar al panel ↗</button><button type="button" class="ghost-link" data-page="recover" style="display:block;margin-top:18px;border:0;background:none;color:#e9e3d5">Recuperar contraseña de gerencia →</button><p class="auth-error" id="adminError" hidden></p></form><aside class="panel"><span class="pill">ACCESO PRIVADO</span><div class="tip-list"><div class="tip"><b>Solo gerente.</b><br>El rol se autoriza en la base de datos. No basta con tener correo y contraseña.</div><div class="tip"><b>Control de intentos.</b><br>Un nuevo examen se asigna aquí, nunca desde el teléfono del mesero.</div><div class="tip"><b>Resultados de equipo.</b><br>Calificaciones, evaluaciones pendientes e intentos en curso.</div></div></aside></div>`}</div>`;
+ if(managerReady){
+   document.getElementById('managerLogout')?.addEventListener('click',async()=>{await client.auth.signOut();managerReady=false;managerData=null;navigate('dashboard')});
+   loadManagerPanel();
+ }else{
+   document.getElementById('managerLogin')?.addEventListener('submit',async e=>{
+      e.preventDefault();if(busy)return;busy=true;
+      const b=document.getElementById('managerBtn');b.disabled=true;b.textContent='Validando…';setError('adminError','');
+      try{
+        const {error}=await client.auth.signInWithPassword({
+         email:document.getElementById('adminEmail').value.trim(),password:document.getElementById('adminPass').value});
+        if(error)throw error;
+        const {error:err}=await client.rpc('sommo_gerente_panel');if(err)throw err;
+        managerReady=true;navigate('dashboard');
+      }catch(ex){setError('adminError','No se pudo autorizar el acceso: '+(ex.message||String(ex)));}
+      finally{busy=false;b.disabled=false;b.textContent='Entrar al panel ↗';}
+   });
+ }
+}
+async function loadManagerPanel(){
+ const dest=document.getElementById('managerPanel');if(!dest)return;
+ const {data,error}=await client.rpc('sommo_gerente_panel');if(view!=='dashboard')return;
+ if(error){dest.innerHTML=`<p class="auth-error">${ESC(error.message)}. Comprueba que instalaste el SQL y que tu usuario tiene rol de gerente.</p>`;return}
+ managerData=data;
+ const people=data.empleados||[],a=data.evaluaciones||[];
+ const finished=a.filter(x=>x.estado==='finalizado'),progress=a.filter(x=>x.estado==='en_curso');
+ const period=new Date().toISOString().slice(0,7);
+ dest.innerHTML=`<div class="manager-stats"><div class="manager-stat"><b>${people.length}</b><small>PERSONAL REGISTRADO</small></div><div class="manager-stat"><b>${finished.length}</b><small>EXÁMENES ENTREGADOS</small></div><div class="manager-stat"><b>${progress.length}</b><small>EXÁMENES EN CURSO</small></div></div>
+ <div class="admin-grid">
+ <form class="panel" id="createEmployee"><h3>Registrar empleado.</h3><div class="field"><label>Nombre completo</label><input name="nombre" required minlength="3" maxlength="100" placeholder="Mariana García"></div><div class="field"><label>Código de empleado</label><input name="codigo" required minlength="4" maxlength="20" placeholder="SOMMO-009" pattern="[A-Za-z0-9-]{4,20}"></div><div class="field"><label>PIN de seis números</label><input name="pin" type="password" autocomplete="new-password" required pattern="[0-9]{6}" maxlength="6" inputmode="numeric"></div><button class="wide-btn" type="submit">Registrar personal ↗</button><p class="auth-error" id="createError" hidden></p></form>
+ <form class="panel" id="assignEmployee"><h3>Asignar examen.</h3><div class="field"><label>Empleado</label><select name="empleado" required><option value="">Selecciona</option>${people.map(p=>`<option value="${ESC(p.id)}">${ESC(p.nombre)} · ${ESC(p.codigo)}</option>`).join('')}</select></div><div class="field"><label>Evaluación</label><select name="tipo" required><option value="ingreso">Nuevo ingreso</option><option value="piso">Primer día en piso</option><option value="recurrente">Recurrente</option></select></div><div class="field"><label>Periodo / ciclo</label><input name="periodo" maxlength="32" value="${ESC(period)}" required></div><button class="wide-btn" type="submit">Autorizar intento ↗</button><p class="auth-error" id="assignError" hidden></p><p class="auth-note">Si el anterior está completado, crea un intento 2 sin borrar el resultado previo.</p></form>
+ <form class="panel" id="changePin"><h3>Cambiar PIN.</h3><div class="field"><label>Empleado</label><select name="empleado" required><option value="">Selecciona</option>${people.map(p=>`<option value="${ESC(p.id)}">${ESC(p.nombre)} · ${ESC(p.codigo)}</option>`).join('')}</select></div><div class="field"><label>Nuevo PIN (6 números)</label><input name="pin" type="password" pattern="[0-9]{6}" maxlength="6" inputmode="numeric" required></div><button class="wide-btn" type="submit">Actualizar PIN ↗</button><p class="auth-error" id="pinError" hidden></p></form>
+ </div><h2 style="font:400 44px var(--serif);margin:50px 0 20px">Historial del equipo.</h2><div class="table-scroll"><table class="results-table"><thead><tr><th>EMPLEADO</th><th>EXAMEN</th><th>PERIODO</th><th>INTENTO</th><th>ESTADO</th><th>RESULTADO</th></tr></thead><tbody>${a.map(x=>`<tr><td>${ESC(x.nombre)}<br><span class="muted">${ESC(x.codigo)}</span></td><td>${ESC(TYPE(x.tipo))}</td><td>${ESC(x.periodo)}</td><td>${x.numero}</td><td>${x.estado==='finalizado'?'Finalizado':x.estado==='en_curso'?'En curso':'Pendiente'}</td><td>${x.aciertos!==null?`${x.aciertos}/18 · ${Math.round(x.aciertos/18*100)}%`:'—'}</td></tr>`).join('')||'<tr><td colspan="6">Todavía no hay evaluaciones asignadas.</td></tr>'}</tbody></table></div><p class="auth-note" style="margin-top:17px">PILOTO: los 250 reactivos siguen pendientes de aprobación por SOMMO. Solo la cuenta marcada como empleado de prueba puede usar preguntas sin validar.</p>`;
+ async function submitAction(id,rpc,keys,errorId){
+    document.getElementById(id).addEventListener('submit',async e=>{
+      e.preventDefault();if(busy)return;busy=true;
+      const f=e.currentTarget,b=f.querySelector('[type="submit"]');b.disabled=true;
+      setError(errorId,'');
+      const obj={};for(const [formKey,apiKey] of Object.entries(keys))obj[apiKey]=f.elements.namedItem(formKey)?.value.trim();
+      try{const {error}=await client.rpc(rpc,obj);if(error)throw error;await loadManagerPanel()}
+      catch(ex){setError(errorId,ex.message||'No fue posible completar la operación');b.disabled=false}
+      finally{busy=false}
+    });
+ }
+ submitAction('createEmployee','sommo_gerente_crear_empleado',
+   {nombre:'p_nombre',codigo:'p_codigo',pin:'p_pin'},'createError');
+ submitAction('assignEmployee','sommo_gerente_asignar',
+   {empleado:'p_empleado',tipo:'p_tipo',periodo:'p_periodo'},'assignError');
+ submitAction('changePin','sommo_gerente_cambiar_pin',
+   {empleado:'p_empleado',pin:'p_pin'},'pinError');
+}
+function renderRecover(){
+ main.innerHTML=`<div class="wrap screen"><button class="back" data-page="dashboard">← Acceso gerencial</button><div class="eyebrow">GERENCIA / RECUPERACIÓN</div><h1 class="intro-title">Recuperar<br><em>contraseña.</em></h1><div class="panel" style="max-width:550px"><form id="recoverForm"><div class="field"><label>Correo registrado en Supabase Authentication</label><input id="recoverEmail" type="email" required></div><button class="wide-btn" type="submit">Enviar enlace de recuperación ↗</button><p class="auth-error" id="recoverError" hidden></p><p class="auth-note">El envío de correos está sujeto al límite de Supabase. El enlace debe apuntar a esta web en Authentication → URL Configuration.</p></form></div></div>`;
+ document.getElementById('recoverForm').addEventListener('submit',async e=>{
+ e.preventDefault();const b=e.currentTarget.querySelector('button');b.disabled=true;
+ const {error}=await client.auth.resetPasswordForEmail(document.getElementById('recoverEmail').value.trim(),{redirectTo:siteUrl});
+ if(error)setError('recoverError',error.message);else {setError('recoverError','');alert('Si tu correo está registrado, recibirás instrucciones. Revisa spam.');}
+ b.disabled=false;
+ });
+}
+function renderReset(){
+ main.innerHTML=`<div class="wrap screen"><div class="eyebrow">GERENCIA / CONTRASEÑA NUEVA</div><h1 class="intro-title">Nueva<br><em>contraseña.</em></h1><div class="panel" style="max-width:560px"><form id="resetForm"><div class="field"><label>Contraseña nueva (mínimo 10 caracteres)</label><input id="resetPass" type="password" minlength="10" autocomplete="new-password" required></div><div class="field"><label>Confirma la contraseña</label><input id="resetPassAgain" type="password" minlength="10" autocomplete="new-password" required></div><button class="wide-btn" type="submit">Guardar contraseña ↗</button><p class="auth-error" id="resetError" hidden></p></form></div></div>`;
+ document.getElementById('resetForm').addEventListener('submit',async e=>{
+ e.preventDefault();const pass=document.getElementById('resetPass').value;
+ if(pass!==document.getElementById('resetPassAgain').value){setError('resetError','Las contraseñas no coinciden');return}
+ const {error}=await client.auth.updateUser({password:pass});
+ if(error)setError('resetError',error.message);else {recovering=false;alert('Contraseña actualizada');navigate('dashboard')}
+ });
 }
 document.body.addEventListener('click',async e=>{
-  const target=e.target.closest('[data-page],[data-start],[data-retry],[data-answer],[data-step]');if(!target)return;
-  if(target.dataset.page){e.preventDefault();navigate(target.dataset.page,{scroll:target.dataset.scroll});return}
-  if(target.dataset.start||target.dataset.retry){selectedExamType=target.dataset.start||target.dataset.retry;navigate(profile?'start':'login');return}
-  if(target.dataset.answer!==undefined&&exam){exam.answers[exam.index]=target.dataset.answer;renderExam();return}
-  if(target.dataset.step&&exam){if(target.dataset.step==='previous'){exam.index=Math.max(0,exam.index-1);renderExam()}else if(exam.answers[exam.index]!==null){if(exam.index===17)await finishExam();else{exam.index++;renderExam()}}}
+ const t=e.target.closest('[data-page],[data-start],[data-assignment],[data-answer],[data-step]');if(!t)return;
+ if(t.dataset.page){e.preventDefault();navigate(t.dataset.page,{scroll:t.dataset.scroll});return}
+ if(t.dataset.start){selectedExamType=t.dataset.start;navigate('staff');return}
+ if(t.dataset.assignment){await openAssignment(t.dataset.assignment);return}
+ if(t.dataset.answer && exam){await saveAnswer(t.dataset.answer);return}
+ if(t.dataset.step && exam){
+   if(t.dataset.step==='previous'){exam.index=Math.max(0,exam.index-1);renderExam()}
+   else if(exam.items[exam.index].seleccion!==null){
+     if(exam.index===17){if(exam.items.every(q=>q.seleccion!==null))await finishExam();else{exam.index=exam.items.findIndex(q=>q.seleccion===null);renderExam()}}
+     else{exam.index++;renderExam()}
+   }
+ }
 });
 mob.addEventListener('click',()=>{const open=nav.classList.toggle('open');mob.setAttribute('aria-expanded',String(open))});
-if(!client){console.error('No se pudo cargar la librería de Supabase. Se necesita conexión a internet.');}
 (async()=>{
-  // Registrar el listener ANTES de resolver la sesión del enlace de recuperación.
-  const recoveryLink=(location.hash.includes('type=recovery')||new URLSearchParams(location.search).get('type')==='recovery');
-  navigate('home');
-  if(!client)return;
-  client.auth.onAuthStateChange((event)=>{
-    if(event==='PASSWORD_RECOVERY'){
-      recoveryRequested=true;
-      navigate('reset');
-    }
-  });
-  try{
-    const {data,error}=await client.auth.getSession();
-    if(error)throw error;
-    if(data.session){
-      // En algunos navegadores el evento llega antes o después de getSession().
-      if(recoveryLink){recoveryRequested=true;navigate('reset');return;}
-      const {data:per,error:perr}=await client.rpc('sommo_mi_perfil');
-      if(!perr&&per){profile=per;if(view==='home')navigate('home')}
-    }else if(recoveryLink){navigate('forgot')}
-  }catch(e){console.error('Sesión no disponible',e);if(recoveryLink)navigate('forgot')}
+ navigate('home');
+ if(!client){console.error('Falta la librería Supabase');return}
+ client.auth.onAuthStateChange(event=>{
+   if(event==='PASSWORD_RECOVERY'){recovering=true;navigate('reset')}
+   if(event==='SIGNED_OUT'){managerReady=false;managerData=null}
+ });
+ if(staffToken){
+   try{const {data,error}=await client.rpc('sommo_personal_evaluaciones',{p_token:staffToken});
+     if(error)throw error;staffProfile={nombre:data.nombre,codigo:data.codigo};if(view==='home')navigate('home');
+   }catch{staffToken='';staffProfile=null;localStorage.removeItem('sommo_staff_token_v6')}
+ }
+ const currentHash=location.hash||'';
+ if(/error_code=otp_expired|error_description=.*expired/i.test(currentHash)){
+   if(view==='home')navigate('recover');
+   return;
+ }
+ try{
+   const {data}=await client.auth.getSession();
+   if(data.session){
+     if(recovering || /type=recovery/.test(currentHash)){recovering=true;navigate('reset');return}
+     const {error}=await client.rpc('sommo_gerente_panel');
+     if(!error)managerReady=true;
+   }
+ }catch(e){console.warn('No se pudo revisar la sesión gerencial',e)}
 })();
+
 </script>
 </body>
 </html>
