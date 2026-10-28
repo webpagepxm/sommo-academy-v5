@@ -46,7 +46,7 @@
 </style>
 <script>
 
-// SOMMO Academy V5 — client only holds publishable key, never correct answers.
+// SOMMO Academy V5.1 — client only holds publishable key, never correct answers.
 // Database performs selection, ownership checks and grading.
 const SUPABASE_URL = 'https://rkhjvngwptnpmgekgopk.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_BTD-FrtW_os2J-4CHkTPrw_LKcIyVzb';
@@ -57,7 +57,8 @@ const menus = {
  recurrente:{name:'Evaluación recurrente',tag:'03 / MENÚ SOMMO',head:'Domina la carta.',sub:'18 preguntas sobre ingredientes, cócteles, vocabulario japonés y destilados, seleccionadas del banco maestro V3.',pass:15}
 };
 const main=document.getElementById('main'),nav=document.getElementById('nav'),mob=document.getElementById('mob-toggle');
-let view='home', exam=null, latestResult=null, selectedExamType='nuevo', profile=null, busy=false;
+let view='home', exam=null, latestResult=null, selectedExamType='nuevo', profile=null, busy=false, recoveryRequested=false;
+const ACADEMY_SITE_URL = 'https://webpagepxm.github.io/sommo-academy-v5/';
 const ESC=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const shuffle=a=>{let b=a.slice();for(let i=b.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b};
 function scrollTop(){window.scrollTo({top:0,behavior:'instant'})}
@@ -67,6 +68,8 @@ function navigate(page,opts={}){
   if(page==='home'){renderHome(); showAccountBanner()}
   if(page==='manual')renderManual();
   if(page==='login')renderLogin();
+  if(page==='forgot')renderForgotPassword();
+  if(page==='reset')renderResetPassword();
   if(page==='dashboard')renderDashboard();
   if(page==='start')renderStart();
   if(page==='exam')renderExam();
@@ -106,7 +109,7 @@ function renderManual(){main.innerHTML=`<div class="wrap screen manual"><button 
 
 
 function renderLogin(){
-  main.innerHTML=`<div class="wrap screen"><button class="back" data-page="home">← Volver al inicio</button><div class="eyebrow" style="margin-top:20px">ACCESO / PERSONAL</div><h1 class="intro-title">Inicia<br><em>sesión.</em></h1><p class="intro-lede">Usa el correo y contraseña del empleado creado en Supabase Authentication.</p><div class="intro-panel"><form class="panel" id="loginForm"><h3>${profile?'Tu cuenta':'Accede a Academy'}</h3>${profile?`<p>Sesión activa: <strong>${ESC(profile.nombre)}</strong></p><button type="button" class="wide-btn" id="logout">Cerrar sesión →</button>`:`<div class="field"><label for="mail">Correo electrónico</label><input id="mail" type="email" autocomplete="email" required placeholder="tu@correo.com"></div><div class="field"><label for="pass">Contraseña</label><input id="pass" type="password" autocomplete="current-password" required placeholder="Tu contraseña"></div><div style="height:22px"></div><button class="wide-btn" type="submit" id="loginBtn">Entrar a Academy <span>↗</span></button>`}<p class="auth-error" id="authError" hidden></p></form><aside class="panel"><span class="pill">ACCESO SEGURO</span><div class="tip-list"><div class="tip"><b>Tu identidad, vinculada a tus resultados.</b><br>Al ingresar, SOMMO reconoce el perfil de empleado registrado.</div><div class="tip"><b>Exámenes seguros.</b><br>El navegador recibe preguntas, pero la clave de respuestas permanece en Supabase.</div><div class="tip"><b>Datos privados.</b><br>Solo podrás consultar tu propio historial. El panel gerencial se habilitará más adelante.</div></div></aside></div></div>`;
+  main.innerHTML=`<div class="wrap screen"><button class="back" data-page="home">← Volver al inicio</button><div class="eyebrow" style="margin-top:20px">ACCESO / PERSONAL</div><h1 class="intro-title">Inicia<br><em>sesión.</em></h1><p class="intro-lede">Usa el correo y contraseña del empleado creado en Supabase Authentication.</p><div class="intro-panel"><form class="panel" id="loginForm"><h3>${profile?'Tu cuenta':'Accede a Academy'}</h3>${profile?`<p>Sesión activa: <strong>${ESC(profile.nombre)}</strong></p><button type="button" class="wide-btn" id="logout">Cerrar sesión →</button>`:`<div class="field"><label for="mail">Correo electrónico</label><input id="mail" type="email" autocomplete="email" required placeholder="tu@correo.com"></div><div class="field"><label for="pass">Contraseña</label><input id="pass" type="password" autocomplete="current-password" required placeholder="Tu contraseña"></div><div style="height:22px"></div><button class="wide-btn" type="submit" id="loginBtn">Entrar a Academy <span>↗</span></button><button type="button" class="ghost-link" data-page="forgot" style="border:0;background:none;color:#e7e0d0;margin-top:17px;cursor:pointer">Olvidé mi contraseña ↗</button>`}<p class="auth-error" id="authError" hidden></p></form><aside class="panel"><span class="pill">ACCESO SEGURO</span><div class="tip-list"><div class="tip"><b>Tu identidad, vinculada a tus resultados.</b><br>Al ingresar, SOMMO reconoce el perfil de empleado registrado.</div><div class="tip"><b>Exámenes seguros.</b><br>El navegador recibe preguntas, pero la clave de respuestas permanece en Supabase.</div><div class="tip"><b>Datos privados.</b><br>Solo podrás consultar tu propio historial. El panel gerencial se habilitará más adelante.</div></div></aside></div></div>`;
   document.getElementById('logout')?.addEventListener('click',async()=>{await client.auth.signOut();profile=null;exam=null;latestResult=null;navigate('home')});
   document.getElementById('loginForm').addEventListener('submit',async e=>{
     e.preventDefault();const b=document.getElementById('loginBtn'),err=document.getElementById('authError');
@@ -122,6 +125,44 @@ function renderLogin(){
     finally{b.disabled=false;b.textContent='Entrar a Academy ↗'}
   });
 }
+// Solicitar un enlace de recuperación para la URL pública exacta del sitio.
+function renderForgotPassword(){
+  main.innerHTML=`<div class="wrap screen"><button class="back" data-page="login">← Volver al acceso</button><div class="eyebrow" style="margin-top:20px">ACCESO / RECUPERACIÓN</div><h1 class="intro-title">Recuperar<br><em>acceso.</em></h1><p class="intro-lede">Te enviaremos un enlace a tu correo. Abre el correo más reciente: los enlaces anteriores pueden caducar.</p><div class="intro-panel"><form class="panel" id="forgotForm"><h3>Tu correo.</h3><div class="field"><label for="forgotMail">Correo del empleado</label><input id="forgotMail" type="email" autocomplete="email" required placeholder="tu@correo.com"></div><button class="wide-btn" type="submit" id="forgotBtn">Enviar enlace de recuperación <span>↗</span></button><p class="auth-error" id="forgotError" hidden></p><p class="auth-note" id="forgotSuccess" hidden>Si existe una cuenta con este correo, recibirás instrucciones para recuperar el acceso. Revisa también la carpeta de spam.</p></form><aside class="panel"><span class="pill">RECUPERACIÓN SEGURA</span><div class="tip-list"><div class="tip"><b>No compartas tus enlaces.</b><br>El enlace de recuperación es personal y temporal.</div><div class="tip"><b>El proyecto conserva tus exámenes.</b><br>Cambiar tu contraseña no elimina el historial de resultados.</div></div></aside></div></div>`;
+  document.getElementById('forgotForm').addEventListener('submit',async e=>{
+    e.preventDefault();const b=document.getElementById('forgotBtn'),err=document.getElementById('forgotError');b.disabled=true;err.hidden=true;b.textContent='Enviando…';
+    try{
+      if(!client)throw Error('No se cargó Supabase.');
+      const {error}=await client.auth.resetPasswordForEmail(document.getElementById('forgotMail').value.trim(),{redirectTo:ACADEMY_SITE_URL});
+      if(error)throw error;
+      document.getElementById('forgotSuccess').hidden=false;
+    }catch(ex){err.textContent='No se pudo solicitar: '+(ex.message||String(ex));err.hidden=false;}
+    finally{b.disabled=false;b.textContent='Enviar enlace de recuperación ↗'}
+  });
+}
+
+function renderResetPassword(){
+  main.innerHTML=`<div class="wrap screen"><div class="eyebrow" style="margin-top:20px">ACCESO / NUEVA CONTRASEÑA</div><h1 class="intro-title">Cambia tu<br><em>contraseña.</em></h1><p class="intro-lede">Has llegado desde tu enlace de recuperación. Elige una contraseña nueva y guárdala en un gestor de contraseñas.</p><div class="intro-panel"><form class="panel" id="resetForm"><h3>Nuevo acceso.</h3><div class="field"><label for="newPass">Contraseña nueva (mínimo 10 caracteres)</label><input id="newPass" type="password" autocomplete="new-password" minlength="10" required></div><div class="field"><label for="repeatPass">Confirmar contraseña</label><input id="repeatPass" type="password" autocomplete="new-password" minlength="10" required></div><button class="wide-btn" type="submit" id="resetBtn">Guardar nueva contraseña <span>↗</span></button><p class="auth-error" id="resetError" hidden></p></form><aside class="panel"><span class="pill">ACCESO PERSONAL</span><div class="tip-list"><div class="tip"><b>La contraseña solo la escribes aquí.</b><br>No la compartas por WhatsApp ni en el chat.</div><div class="tip"><b>No cambia tu registro.</b><br>Seguirás teniendo el mismo perfil de empleado y tus resultados.</div></div></aside></div></div>`;
+  document.getElementById('resetForm').addEventListener('submit',async e=>{
+    e.preventDefault();const b=document.getElementById('resetBtn'),err=document.getElementById('resetError');err.hidden=true;
+    const p=document.getElementById('newPass').value,again=document.getElementById('repeatPass').value;
+    if(p!==again){err.hidden=false;err.textContent='Las contraseñas no coinciden.';return;}
+    b.disabled=true;b.textContent='Guardando…';
+    try{
+      if(!client)throw Error('No se cargó Supabase.');
+      const {error}=await client.auth.updateUser({password:p});
+      if(error)throw error;
+      // Nunca dejar tokens del enlace de recuperación en la barra de direcciones.
+      if(location.hash)history.replaceState(null,'',location.pathname+location.search);
+      recoveryRequested=false;
+      const {data,error:perr}=await client.rpc('sommo_mi_perfil');
+      if(!perr&&data)profile=data;
+      main.innerHTML=`<div class="wrap screen"><div class="eyebrow">ACCESO / LISTO</div><h1 class="intro-title">Contraseña<br><em>actualizada.</em></h1><p class="intro-lede">Ya puedes entrar a SOMMO Academy con tu contraseña nueva.</p><div class="actions-row"><button data-page="${profile?'home':'login'}">${profile?'Ir a mi Academy':'Iniciar sesión'} ↗</button></div></div>`;
+      navState();
+    }catch(ex){err.hidden=false;err.textContent='No se pudo guardar: '+(ex.message||String(ex));}
+    finally{b.disabled=false;b.textContent='Guardar nueva contraseña ↗'}
+  });
+}
+
 function renderStart(){
   if(!profile){navigate('login');return}
   const d=menus[selectedExamType];
@@ -183,10 +224,26 @@ document.body.addEventListener('click',async e=>{
 mob.addEventListener('click',()=>{const open=nav.classList.toggle('open');mob.setAttribute('aria-expanded',String(open))});
 if(!client){console.error('No se pudo cargar la librería de Supabase. Se necesita conexión a internet.');}
 (async()=>{
+  // Registrar el listener ANTES de resolver la sesión del enlace de recuperación.
+  const recoveryLink=(location.hash.includes('type=recovery')||new URLSearchParams(location.search).get('type')==='recovery');
   navigate('home');
   if(!client)return;
-  try{const {data}=await client.auth.getSession();if(data.session){const {data:per,error}=await client.rpc('sommo_mi_perfil');if(!error&&per){profile=per;if(view==='home')navigate('home')}}}
-  catch(e){console.error('Sesión no disponible',e)}
+  client.auth.onAuthStateChange((event)=>{
+    if(event==='PASSWORD_RECOVERY'){
+      recoveryRequested=true;
+      navigate('reset');
+    }
+  });
+  try{
+    const {data,error}=await client.auth.getSession();
+    if(error)throw error;
+    if(data.session){
+      // En algunos navegadores el evento llega antes o después de getSession().
+      if(recoveryLink){recoveryRequested=true;navigate('reset');return;}
+      const {data:per,error:perr}=await client.rpc('sommo_mi_perfil');
+      if(!perr&&per){profile=per;if(view==='home')navigate('home')}
+    }else if(recoveryLink){navigate('forgot')}
+  }catch(e){console.error('Sesión no disponible',e);if(recoveryLink)navigate('forgot')}
 })();
 </script>
 </body>
