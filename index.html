@@ -16,9 +16,27 @@
 @media(max-width:540px){.brand img{width:133px}.brand small{font-size:8px}.brand .separator{height:25px}.hero-main h1{font-size:clamp(76px,17vw,110px)}.hero-media{min-height:360px}.photo-copy{left:20px;bottom:22px}.section,.academy-section{padding-top:72px;padding-bottom:76px}.stage{padding:25px}.stage h3{font-size:48px}.screen{padding-top:36px;padding-bottom:65px}.results-hero{display:block;padding:26px}.score{margin-top:12px}.question-card h2{font-size:40px}.question-card{padding:26px 20px}.option{padding:17px 13px;font-size:13px}.foot{display:block;line-height:2.1}.exam-head{display:block}.exam-head .mono{display:block;margin-top:14px}.manager-stats{grid-template-columns:1fr}.actions-row{display:grid}.intro-panel{gap:13px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 </style>
+<style>
+/* V7 - acceso autonomo y reloj continuo */
+.entry-tabs{display:flex;gap:0;border-bottom:1px solid #536051;margin-bottom:28px}
+.entry-tab{flex:1;min-height:46px;background:none;border:none;color:#aeb6a9;font-size:13px;padding:10px;cursor:pointer}
+.entry-tab.active{color:#f5f0e5;border-bottom:2px solid #eee1cd;font-weight:600}
+#staffLogin[hidden],#staffRegister[hidden]{display:none!important}
+.clock-group{position:relative;width:124px;height:124px;flex:none}
+.clock-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px}
+.clock-center strong{font:600 28px/1 var(--mono);letter-spacing:-1px;color:#f2f0e9;font-variant-numeric:tabular-nums}
+.clock-center small{font:9px var(--mono);letter-spacing:.11em;color:#bfc5b8}
+.timer-warning{font-size:12px;line-height:1.6;color:#c9c1ad;margin:8px 0 20px}
+.manager-note{font-size:13px;line-height:1.9;color:#b5bead;max-width:650px}
+.manager-exception{border:1px solid #445043;margin:34px 0 20px;padding:20px 24px;background:#202720}
+.manager-exception summary{cursor:pointer;color:#f0eee6;font-size:13px}
+.manager-exception form{margin-top:26px;max-width:440px}
+@media(max-width:620px){.exam-head{display:flex;align-items:flex-start;gap:10px}.exam-head h1{font-size:31px!important}.clock-group{width:104px;height:104px}.clock-group svg{width:104px;height:104px}.clock-center strong{font-size:23px}.clock-center small{font-size:8px}}
+@media(max-width:540px){.foot span{display:block;margin-top:9px}}
+</style>
 </head>
 <body>
-<div class="topline">SOMMO / FORMACIÓN INTERNA · V6 PILOTO</div>
+<div class="topline">SOMMO / FORMACIÓN INTERNA · V7 PILOTO</div>
 <header class="wrap top">
   <a href="#inicio" class="brand" data-page="home" aria-label="SOMMO Academy inicio">
     <img src="https://cdn.prod.website-files.com/630a7f61ece7db6e1ffb2ff7/68484239fac612f59d2e4f58_Logos%20SOMMO-03%20Brand%20H%20beige.svg" alt="SOMMO Sushi Bar & Cocktails" onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMTAwIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEwMCI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMxMDExMGYiLz48dGV4dCB4PSI1IiB5PSI1MiIgZmlsbD0iI2VjZThkZSIgZm9udC1mYW1pbHk9IkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjYyIiBsZXR0ZXItc3BhY2luZz0iLTMiPlNPTU1PPC90ZXh0Pjx0ZXh0IHg9IjYiIHk9IjgyIiBmaWxsPSIjZWNlOGRlIiBmb250LWZhbWlseT0iQXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtc2l6ZT0iMTciIGxldHRlci1zcGFjaW5nPSIyIj5TVVNISSBCQVIgJmFtcDsgQ09DS1RBSUxTPC90ZXh0Pjwvc3ZnPgo='">
@@ -53,7 +71,7 @@
 @media(max-width:1000px){.admin-grid{grid-template-columns:1fr}}
 </style>
 <script>
-// SOMMO Academy V6 — la publishable key no es una credencial privada.
+// SOMMO Academy V7 — la publishable key no es una credencial privada.
 // Calificacion, bloqueo de reintentos y verificacion de identidad ocurren en Supabase.
 const SUPABASE_URL='https://rkhjvngwptnpmgekgopk.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_BTD-FrtW_os2J-4CHkTPrw_LKcIyVzb';
@@ -65,10 +83,12 @@ const menus={
 };
 const main=document.getElementById('main'),nav=document.getElementById('nav'),mob=document.getElementById('mob-toggle');
 const ESC=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const TYPE=t=>menus[t]?.name||t;
+const TYPE=t=>t==='ingreso'?'Nuevo ingreso':(menus[t]?.name||t);
+const formatDateTime=s=>{try{return new Intl.DateTimeFormat('es-MX',{dateStyle:'short',timeStyle:'short',timeZone:'America/Mexico_City'}).format(new Date(s))}catch{return 'Fecha no disponible'}};
 const siteUrl='https://webpagepxm.github.io/sommo-academy-v5/';
+sessionStorage.removeItem('sommo_staff_token_v62'); // cerrar token previo a la migracion
 let view='home',selectedExamType='nuevo',exam=null,latestResult=null,busy=false,
-    staffToken=localStorage.getItem('sommo_staff_token_v6')||'',staffProfile=null,
+    staffToken=sessionStorage.getItem('sommo_staff_token_v7')||'',staffProfile=null,clockHandle=null,clockSyncing=false,clockOffset=0,
     managerReady=false,recovering=false,managerData=null;
 function goTop(){window.scrollTo(0,0)}
 function setError(id,msg){const el=document.getElementById(id);if(el){el.textContent=msg;el.hidden=!msg}}
@@ -91,13 +111,13 @@ function navigate(page,opts={}){
 function showAccountBanner(){
  const hero=main.querySelector('.hero');if(!hero)return;
  const banner=document.createElement('div');banner.className='wrap';
- banner.innerHTML=`<div class="accountbox"><div><strong>${staffProfile?'Personal: '+ESC(staffProfile.nombre):'Personal de SOMMO · acceso sin correo'}</strong><small>${staffProfile?'Tus respuestas se guardan mientras avanzas. Cerrar la página no reinicia el examen.':'Identifícate con tu código y PIN. Solo la gerencia tiene una cuenta de administrador.'}</small></div><button type="button" data-page="staff">${staffProfile?'Mis evaluaciones →':'Identificarme →'}</button></div>`;
+ banner.innerHTML=`<div class="accountbox"><div><strong>${staffProfile?'Personal: '+ESC(staffProfile.nombre):'Personal de SOMMO · acceso sin correo'}</strong><small>${staffProfile?'Tus respuestas se guardan mientras avanzas. Cerrar la página no reinicia el examen.':'¿Es tu primera vez? Regístrate con tu nombre y teléfono. Si ya tienes expediente, entra con tu PIN.'}</small></div><button type="button" data-page="staff">${staffProfile?'Mis evaluaciones →':'Identificarme →'}</button></div>`;
  hero.before(banner);
 }
 function renderHome(){main.innerHTML=`<div class="wrap hero">
  <div class="hero-left"><div class="hero-main"><div class="eyebrow">KNOWLEDGE · SERVICE · HOSPITALITY</div><h1>Good service.<br><em>By design.</em></h1><p class="lede">Una experiencia de hospitalidad comienza con personas preparadas. Aprende, practica y evalúa tu conocimiento de servicio y nuestra carta.</p><div class="hero-actions"><button class="text-btn" data-page="home" data-scroll="evaluaciones">Explorar evaluaciones <span aria-hidden="true">↗</span></button><button class="ghost-link" data-page="manual">Leer protocolos de servicio</button></div></div><div class="hero-caption"><span>TRAINING PROGRAM / 2026</span><span>PUERTO ESCONDIDO, OAXACA</span></div></div>
  <div class="hero-media"><img class="foodphoto" src="https://cdn.prod.website-files.com/630a7f61ece7db6e1ffb2ff7/66b19a2fea360c995e6de414_nigiri%20kamatoro.jpg" alt="Nigiri de SOMMO" onerror="this.style.display='none'"><div class="photo-copy"><span>UNA CULTURA<br>DE SERVICIO</span><b>01—03</b></div></div></div>
- <section class="paper"><div class="wrap section" id="evaluaciones"><div class="section-heading"><div><div class="eyebrow">01 / EL PROGRAMA</div><h2>Tres momentos.<br><em>Un estándar.</em></h2></div><p>Evaluaciones diferentes para cada etapa de aprendizaje. Todas tienen 18 preguntas y retroalimentación al finalizar.</p></div><div class="cards">
+ <section class="paper"><div class="wrap section" id="evaluaciones"><div class="section-heading"><div><div class="eyebrow">01 / EL PROGRAMA</div><h2>Tres momentos.<br><em>Un estándar.</em></h2></div><p>Evaluaciones diferentes para cada etapa de aprendizaje. Todas tienen 18 preguntas y 20 minutos de tiempo continuo.</p></div><div class="cards">
  ${[['nuevo','01','Antes de comenzar.','Un diagnóstico amable de conocimientos básicos y experiencia en restaurantes.'],['piso','02','Tu primer día.','Protocolos de atención, seguridad, trabajo en equipo y operación de mesas.'],['recurrente','03','Conoce SOMMO.','Ingredientes, gastronomía japonesa y coctelería de nuestra carta.']].map(([key,i,title,desc])=>`<article class="stage"><div><div class="stagehead"><span>${i} / EVALUACIÓN</span><span>18 PREGUNTAS</span></div><h3>${title}</h3><p>${desc}</p></div><button type="button" data-start="${key}">Comenzar evaluación <span aria-hidden="true">↗</span></button></article>`).join('')}
  </div></div></section>
  <section class="academy-section"><div class="wrap academy-grid"><div><div class="eyebrow">02 / APRENDER ANTES DE EVALUAR</div><h2>El arte de<br><em>servir bien.</em></h2><p>Una guía breve y práctica para el equipo de piso. Mantener una mesa sin «muertos», pedir permiso antes de retirar y conocer la secuencia tradicional de servicio.</p><button class="academy-cta" data-page="manual">Leer el manual de servicio ↗</button></div><div class="academy-note"><div class="lesson-item"><strong>01</strong><span>Mesa limpia, cómoda y sin objetos que ya no se utilizan.</span></div><div class="lesson-item"><strong>02</strong><span>Preguntar antes de retirar platos, vasos o utensilios.</span></div><div class="lesson-item"><strong>03</strong><span>Orden de servicio y atención personalizada a cada comensal.</span></div></div></div></section>`}
@@ -118,106 +138,156 @@ function renderManual(){main.innerHTML=`<div class="wrap screen manual"><button 
  </article><div class="actions-row"><button data-start="piso">Practicar · primer día en piso ↗</button><button data-page="home">Volver a las evaluaciones</button></div></div>`}
 
 
+async function logoutStaff(){
+  try{ if(staffToken)await client.rpc('sommo_personal_salir',{p_token:staffToken}); }catch(ex){}
+  sessionStorage.removeItem('sommo_staff_token_v7');staffToken='';staffProfile=null;exam=null;latestResult=null;navigate('staff');
+}
+function stopClock(){if(clockHandle){clearInterval(clockHandle);clockHandle=null}clockSyncing=false}
+function formatClock(s){const n=Math.max(0,Math.ceil(s));return `${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`}
+function serverRemaining(){return exam?.deadline?Math.max(0,(exam.deadline-Date.now()-clockOffset)/1000):0}
+function updateClock(){
+ if(!exam||view!=='exam')return;
+ const secs=serverRemaining(),el=document.getElementById('timerText'),ring=document.getElementById('timerRing');
+ if(el)el.textContent=formatClock(secs);
+ if(ring){ring.style.strokeDashoffset=String(326.7*(1-Math.max(0,Math.min(1,secs/(exam.minutes*60)))));ring.style.stroke=secs<=60?'#ae5542':secs<=300?'#b29a6f':'#a7b29a';}
+ const note=document.getElementById('timerWarning');if(note)note.textContent=secs<=0?'Tiempo agotado. Cerrando el intento…':secs<=60?'Último minuto: entrega antes de que se agote el tiempo.':secs<=300?'Quedan menos de cinco minutos.':'Si actualizas o cierras, el cronómetro sigue corriendo.';
+ if(secs<=0)syncExamClock();
+}
+async function syncExamClock(){
+ if(!exam||clockSyncing||!client)return;clockSyncing=true;
+ const attempt=exam.id;
+ try{
+   const {data,error}=await client.rpc('sommo_personal_estado_tiempo',{p_token:staffToken,p_intento:attempt});
+   if(error)throw error;if(!exam||exam.id!==attempt)return;
+   if(data?.estado==='finalizado'){
+     const old=exam;stopClock();sessionStorage.removeItem('sommo_active_assignment_v7');
+     latestResult={...data,name:old.name,type:old.type,periodo:old.periodo};exam=null;navigate('results');return;
+   }
+   if(data?.servidor_en)clockOffset=Date.parse(data.servidor_en)-Date.now();
+   if(data?.limite_en)exam.deadline=Date.parse(data.limite_en);
+ }catch(err){const note=document.getElementById('timerWarning');if(note)note.textContent='Sin conexión. El cronómetro continúa. Reconecta para guardar y finalizar.'}
+ finally{clockSyncing=false;}
+}
+function startClock(){stopClock();updateClock();let lastSync=Date.now();clockHandle=setInterval(()=>{updateClock();if(!exam){stopClock();return}if(Date.now()-lastSync>=15000){lastSync=Date.now();syncExamClock()}},1000)}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&exam)syncExamClock()});
+async function logoutStaff(){
+ stopClock();sessionStorage.removeItem('sommo_active_assignment_v7');
+ try{if(staffToken)await client.rpc('sommo_personal_salir',{p_token:staffToken})}catch{}
+ sessionStorage.removeItem('sommo_staff_token_v7');staffToken='';staffProfile=null;exam=null;latestResult=null;navigate('staff');
+}
 function renderStaff(){
  const profile=staffProfile;
- main.innerHTML=`<div class="wrap screen"><button class="back" data-page="home">← Volver al inicio</button><div class="eyebrow" style="margin-top:20px">PERSONAL / ACCESO A EVALUACIONES</div><h1 class="intro-title">${profile?'Mis':'Antes de'}<br><em>${profile?'evaluaciones.':'comenzar.'}</em></h1><p class="intro-lede">${profile?'Tus evaluaciones están vinculadas a tu código. Cada intento se guarda en Supabase y no puede reiniciarse por recargar la página.':'Identifícate con el código que te asignó gerencia y tu PIN de seis números. No necesitas correo ni cuenta de usuario.'}</p>
- ${profile?`<div class="accountbox"><div><strong>${ESC(profile.nombre)}</strong><small>${ESC(profile.codigo)} · Cada evaluación solo puede iniciarse una vez.</small></div><button id="staffLogout">Salir de este dispositivo ↗</button></div><div id="assignmentArea" style="margin-top:30px"><p class="auth-note">Cargando tus evaluaciones…</p></div>`:
- `<div class="intro-panel"><form class="panel" id="staffLogin"><h3>Identificación personal</h3><div class="field"><label for="staffCode">Código de empleado</label><input id="staffCode" autocomplete="username" placeholder="SOMMO-001" maxlength="32" required autocapitalize="characters"></div><div class="field"><label for="staffPin">PIN personal (6 números)</label><input id="staffPin" type="password" inputmode="numeric" pattern="[0-9]{6}" autocomplete="off" maxlength="6" placeholder="••••••" required></div><button class="wide-btn" id="staffLoginBtn" type="submit">Ver mis evaluaciones <span>↗</span></button><p class="auth-error" id="staffError" hidden></p></form><aside class="panel"><span class="pill">EXAMEN SIN REINICIOS</span><div class="tip-list"><div class="tip"><b>Un intento por asignación.</b><br>Si sales, vuelves al mismo examen.</div><div class="tip"><b>Respuestas guardadas.</b><br>Se registra cada selección al tocarla.</div><div class="tip"><b>Un nuevo intento solo con autorización.</b><br>Gerencia puede asignar una segunda oportunidad.</div></div></aside></div>`}</div>`;
+ main.innerHTML=`<div class="wrap screen"><button class="back" data-page="home">← Volver al inicio</button><div class="eyebrow" style="margin-top:20px">PERSONAL / SOMMO ACADEMY</div><h1 class="intro-title">${profile?'Mis':'Tu'}<br><em>${profile?'evaluaciones.':'capacitación.'}</em></h1><p class="intro-lede">${profile?'Tu nombre queda asociado a cada intento y sus resultados. Cerrar la página no detiene los 20 minutos.':'Si es tu primera vez, regístrate aquí mismo. No necesitas correo, SMS ni autorización de gerencia.'}</p>
+ ${profile?`<div class="accountbox"><div><strong>${ESC(profile.nombre)}</strong><small>Identidad declarada · 18 preguntas · 20 minutos sin pausas por examen.</small></div><button id="staffLogout">Salir de este dispositivo ↗</button></div><div id="assignmentArea" style="margin-top:30px"><p class="auth-note">Consultando tus evaluaciones…</p></div>`:
+ `<div class="intro-panel"><div class="panel"><div class="entry-tabs" role="tablist" aria-label="Tipo de acceso"><button class="entry-tab active" type="button" id="chooseRegister">Primera vez</button><button class="entry-tab" type="button" id="chooseLogin">Ya me registré</button></div>
+ <form id="staffRegister"><h3>Tu primer examen.</h3><div class="field"><label for="newStaffName">Nombre completo (nombre y apellido)</label><input id="newStaffName" maxlength="100" minlength="6" autocomplete="name" placeholder="Ej. Carlos Hernández" required></div><div class="field"><label for="newStaffPhone">Teléfono personal (10 dígitos)</label><input id="newStaffPhone" type="tel" inputmode="tel" maxlength="20" autocomplete="tel-national" placeholder="954 123 4567" required></div><div class="field"><label for="newStaffPin">Crea un PIN de 6 números</label><input id="newStaffPin" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="new-password" placeholder="••••••" required></div><label class="checkline" style="margin-bottom:20px"><input type="checkbox" id="regConsent" required><span>Confirmo que proporciono mis datos para mi capacitación interna y que los resultados se registrarán con mi nombre.</span></label><button class="wide-btn" id="staffRegisterBtn" type="submit">Registrarme y continuar ↗</button><p class="auth-error" id="registerError" hidden></p></form>
+ <form id="staffLogin" hidden><h3>Continúa aquí.</h3><div class="field"><label for="staffPhone">Teléfono registrado</label><input id="staffPhone" type="tel" inputmode="tel" autocomplete="tel-national" maxlength="20" placeholder="954 123 4567" required></div><div class="field"><label for="staffPin">Tu PIN de seis números</label><input id="staffPin" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="off" placeholder="••••••" required></div><button class="wide-btn" id="staffLoginBtn" type="submit">Ver mis evaluaciones ↗</button><p class="auth-error" id="staffError" hidden></p></form></div>
+ <aside class="panel"><span class="pill">SOMMO / PILOTO</span><div class="tip-list"><div class="tip"><b>Regístrate una vez.</b><br>Después vuelve con tu teléfono y PIN. No repitas tu registro.</div><div class="tip"><b>18 preguntas · 20 minutos.</b><br>El tiempo inicia al abrir el examen; jamás se pausa ni reinicia.</div><div class="tip"><b>Respuestas seguras.</b><br>Se guarda cada respuesta en Supabase. Un intento por evaluación y periodo.</div><div class="tip"><b>Evaluación de prueba.</b><br>Las preguntas aún requieren la aprobación de SOMMO.</div></div></aside></div>`}</div>`;
  if(profile){
-   document.getElementById('staffLogout')?.addEventListener('click',async()=>{
-     try{await client.rpc('sommo_personal_salir',{p_token:staffToken})}catch{};
-     localStorage.removeItem('sommo_staff_token_v6');staffToken='';staffProfile=null;exam=null;navigate('staff');
-   });
-   loadAssignments();
- }else{
-   document.getElementById('staffLogin').addEventListener('submit',async e=>{
-     e.preventDefault();if(busy)return;busy=true;
-     const b=document.getElementById('staffLoginBtn');b.disabled=true;b.textContent='Comprobando…';setError('staffError','');
-     try{
-       const {data,error}=await client.rpc('sommo_personal_ingresar',{
-         p_codigo:document.getElementById('staffCode').value.trim(),
-         p_pin:document.getElementById('staffPin').value.trim()});
-       if(error)throw error;
-       if(data?.error)throw Error(data.error);
-       if(!data?.token)throw Error('El servidor no devolvió una sesión. Comprueba que instalaste el SQL V6.');
-       staffToken=data.token;localStorage.setItem('sommo_staff_token_v6',staffToken);
-       staffProfile={nombre:data.nombre,codigo:data.codigo};navigate('staff');
-     }catch(ex){setError('staffError',ex.message||'No se pudo identificar.');}
-     finally{busy=false;b.disabled=false;b.textContent='Ver mis evaluaciones ↗';}
-   });
+   document.getElementById('staffLogout')?.addEventListener('click',logoutStaff);loadAssignments();return;
  }
+ function choose(tab){const reg=tab==='register';document.getElementById('staffRegister').hidden=!reg;document.getElementById('staffLogin').hidden=reg;document.getElementById('chooseRegister').classList.toggle('active',reg);document.getElementById('chooseLogin').classList.toggle('active',!reg)}
+ document.getElementById('chooseRegister').addEventListener('click',()=>choose('register'));
+ document.getElementById('chooseLogin').addEventListener('click',()=>choose('login'));
+ document.getElementById('staffRegister').addEventListener('submit',async e=>{
+   e.preventDefault();if(busy)return;busy=true;const b=document.getElementById('staffRegisterBtn');b.disabled=true;b.textContent='Creando expediente…';setError('registerError','');
+   try{
+     const {data,error}=await client.rpc('sommo_personal_autoregistrar',{
+       p_nombre:document.getElementById('newStaffName').value.trim(),
+       p_telefono:document.getElementById('newStaffPhone').value.trim(),
+       p_pin:document.getElementById('newStaffPin').value.trim()});
+     if(error)throw error;if(data?.error)throw Error(data.error);if(!data?.token)throw Error('No se recibió la sesión.');
+     staffToken=data.token;sessionStorage.setItem('sommo_staff_token_v7',staffToken);
+     staffProfile={nombre:data.nombre};navigate('staff');
+   }catch(err){setError('registerError',err.message||'No pudimos registrar tus datos.');}
+   finally{busy=false;b.disabled=false;b.textContent='Registrarme y continuar ↗';}
+ });
+ document.getElementById('staffLogin').addEventListener('submit',async e=>{
+   e.preventDefault();if(busy)return;busy=true;const b=document.getElementById('staffLoginBtn');b.disabled=true;b.textContent='Comprobando…';setError('staffError','');
+   try{
+     const {data,error}=await client.rpc('sommo_personal_ingresar_telefono',{
+       p_telefono:document.getElementById('staffPhone').value.trim(),
+       p_pin:document.getElementById('staffPin').value.trim()});
+     if(error)throw error;if(data?.error)throw Error(data.error);if(!data?.token)throw Error('No se recibió la sesión.');
+     staffToken=data.token;sessionStorage.setItem('sommo_staff_token_v7',staffToken);
+     staffProfile={nombre:data.nombre};navigate('staff');
+   }catch(err){setError('staffError',err.message||'Revisa tu teléfono y PIN.');}
+   finally{busy=false;b.disabled=false;b.textContent='Ver mis evaluaciones ↗';}
+ });
 }
 async function loadAssignments(){
  const dest=document.getElementById('assignmentArea');if(!dest)return;
  try{
-   const {data,error}=await client.rpc('sommo_personal_evaluaciones',{p_token:staffToken});if(error)throw error;
-   if(view!=='staff')return;
-   staffProfile={nombre:data.nombre,codigo:data.codigo};
-   const assignments=(data.evaluaciones||[]);
+   const {data,error}=await client.rpc('sommo_personal_evaluaciones',{p_token:staffToken});if(error)throw error;if(view!=='staff')return;
+   staffProfile={nombre:data.nombre};
+   const assignments=data.evaluaciones||[];
    dest.innerHTML=assignments.length?`<div class="cards">${assignments.map(a=>{
-      const status=a.estado==='finalizado'?'FINALIZADO':a.estado==='en_curso'?'EN CURSO':'PENDIENTE';
-      return `<article class="stage" style="min-height:260px"><div><div class="stagehead"><span>${ESC(a.periodo)} · INTENTO ${a.numero}</span><span>${status}</span></div><h3>${ESC(TYPE(a.tipo))}</h3><p>${a.estado==='finalizado'?`${a.aciertos}/18 aciertos · examen cerrado`:a.estado==='en_curso'?'Tienes un examen comenzado: continuarás donde lo dejaste.':'18 preguntas. Al comenzar se fijan tus preguntas y su orden.'}</p></div><button ${a.estado==='finalizado'?'disabled':''} data-assignment="${ESC(a.id)}">${a.estado==='finalizado'?'Evaluación completada':a.estado==='en_curso'?'Continuar el mismo examen ↗':'Comenzar evaluación ↗'}</button></article>`;
-   }).join('')}</div>`:`<div class="panel"><h3>No tienes evaluaciones asignadas.</h3><p class="auth-note">Pide a gerencia que te asigne un examen desde su panel. No puedes crear intentos por tu cuenta.</p></div>`;
- }catch(ex){
-   if(/vencido|sesión|Identificate/i.test(ex.message)){localStorage.removeItem('sommo_staff_token_v6');staffToken='';staffProfile=null;exam=null;navigate('staff');return}
-   dest.innerHTML=`<p class="auth-error">${ESC(ex.message||'No se pudieron cargar las evaluaciones.')}</p>`;
+    const status=a.estado==='finalizado'?'FINALIZADO':a.estado==='en_curso'?'EN CURSO':'PENDIENTE';
+    const limit=a.limite_en?formatDateTime(a.limite_en):'';
+    return `<article class="stage" style="min-height:260px"><div><div class="stagehead"><span>${ESC(a.periodo)} · INTENTO ${a.numero}</span><span>${status}</span></div><h3>${ESC(TYPE(a.tipo))}</h3><p>${a.estado==='finalizado'?`${a.aciertos}/18 aciertos · intento cerrado`:a.estado==='en_curso'?`El mismo examen sigue corriendo. Límite: ${ESC(limit)}`:'18 preguntas · 20 minutos continuos. El reloj inicia al comenzar.'}</p></div><button ${a.estado==='finalizado'?'disabled':''} data-assignment="${ESC(a.id)}">${a.estado==='finalizado'?'Evaluación completada':a.estado==='en_curso'?'Continuar intento ↗':'Comenzar evaluación ↗'}</button></article>`;
+   }).join('')}</div>`:`<div class="panel"><h3>Sin evaluaciones disponibles.</h3><p class="auth-note">Contacta a SOMMO si necesitas habilitar alguna evaluación.</p></div>`;
+ }catch(err){
+   if(/vencido|sesión|Identificate/i.test(err.message)){sessionStorage.removeItem('sommo_staff_token_v7');staffToken='';staffProfile=null;navigate('staff');return}
+   dest.innerHTML=`<p class="auth-error">${ESC(err.message||'No pudimos consultar tus evaluaciones.')}</p>`;
  }
 }
 async function openAssignment(id){
- if(busy)return;busy=true;const button=document.querySelector(`[data-assignment="${id}"]`);
- if(button){button.disabled=true;button.textContent='Abriendo…'}
+ if(busy)return;busy=true;const btn=document.querySelector(`[data-assignment="${id}"]`);if(btn){btn.disabled=true;btn.textContent='Abriendo…'}
  try{
    const {data,error}=await client.rpc('sommo_personal_abrir',{p_token:staffToken,p_asignacion:id});if(error)throw error;
+   if(data?.estado==='finalizado'){sessionStorage.removeItem('sommo_active_assignment_v7');latestResult={...data,name:staffProfile.nombre,type:'ingreso',periodo:'',motivo:data.motivo};navigate('staff');return}
    if(!data?.preguntas||data.preguntas.length!==18)throw Error('No llegaron las 18 preguntas.');
+   clockOffset=Date.parse(data.servidor_en)-Date.now();
    exam={id:data.intento_id,assignment:id,type:data.tipo,periodo:data.periodo,
-      name:staffProfile.nombre,index:Math.max(0,data.preguntas.findIndex(q=>!q.seleccion)),items:data.preguntas};
-   navigate('exam');
- }catch(ex){alert(ex.message||'No se pudo abrir el examen');if(view==='staff')loadAssignments()}
- finally{busy=false;if(button)button.disabled=false}
+     deadline:Date.parse(data.limite_en),minutes:data.duracion_minutos||20,
+     name:staffProfile.nombre,index:Math.max(0,data.preguntas.findIndex(q=>!q.seleccion)),items:data.preguntas};
+   sessionStorage.setItem('sommo_active_assignment_v7',id);
+   navigate('exam');startClock();
+ }catch(err){alert(err.message||'No fue posible abrir el examen.');if(view==='staff')loadAssignments()}
+ finally{busy=false;if(btn)btn.disabled=false}
 }
 function renderExam(){
  if(!exam){navigate('staff');return}
  const i=exam.index,q=exam.items[i],answered=exam.items.filter(x=>x.seleccion!==null).length;
- main.innerHTML=`<div class="wrap screen"><button class="back" id="leaveExam">← Salir (sin reiniciar)</button><div class="exam-head"><div><div class="eyebrow">${ESC(TYPE(exam.type))} · ${ESC(exam.name)} · ${ESC(exam.periodo)}</div><h1 style="font:400 42px var(--serif);margin:15px 0 0">Tu examen continúa.</h1></div><span class="mono">${answered} DE 18 GUARDADAS</span></div><div class="progress-track"><div class="progress-fill" style="width:${answered/18*100}%"></div></div><section class="question-card"><div class="q-top"><span class="mono">PREGUNTA ${String(i+1).padStart(2,'0')} / 18</span><span class="mono">${ESC(q.categoria)}</span></div><h2>${ESC(q.pregunta)}</h2><div class="options" role="radiogroup" aria-label="Opciones de respuesta">${q.opciones.map((o,j)=>`<button type="button" class="option ${q.seleccion===o.id?'selected':''}" data-answer="${ESC(o.id)}" role="radio" aria-checked="${q.seleccion===o.id}"><span class="letter">${'ABCD'[j]}</span><span>${ESC(o.texto)}</span></button>`).join('')}</div><p class="save-status" id="saveStatus">${q.seleccion?'✓ Respuesta guardada en Supabase':'Selecciona una respuesta. Se guardará automáticamente.'}</p></section><div class="exam-actions"><button data-step="previous" ${i===0?'disabled':''}>← Anterior</button><span class="mono muted">${i+1} / 18</span><button class="primary" id="nextStep" data-step="next" ${q.seleccion===null?'disabled':''}>${i===17?"Finalizar examen":"Siguiente →"}</button></div><p class="auth-error" id="finishError" hidden></p><p class="auth-note">Actualizar o cerrar esta página no crea un examen nuevo. Gerencia debe autorizar cualquier segundo intento.</p></div>`;
- const n=document.getElementById('nextStep');if(i===17)n.textContent=answered===18?'Entregar examen':'Ir a preguntas pendientes';
- document.getElementById('leaveExam').addEventListener('click',()=>{exam=null;navigate('staff')});
+ main.innerHTML=`<div class="wrap screen"><button class="back" id="leaveExam">← Volver (el reloj sigue)</button><div class="exam-head"><div><div class="eyebrow">${ESC(TYPE(exam.type))} · ${ESC(exam.name)}</div><h1 style="font:400 42px var(--serif);margin:15px 0 0">Tu examen está en curso.</h1><p class="auth-note">18 preguntas · ${ESC(exam.periodo)} · El tiempo no se pausa.</p></div><div class="clock-group"><svg viewBox="0 0 124 124" width="124" height="124" role="img" aria-label="Tiempo restante"><circle cx="62" cy="62" r="52" fill="none" stroke="#384039" stroke-width="6"/><circle id="timerRing" cx="62" cy="62" r="52" fill="none" stroke="#a7b29a" stroke-width="6" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="0" transform="rotate(-90 62 62)"/></svg><div class="clock-center"><strong id="timerText">20:00</strong><small>RESTANTES</small></div></div></div><p class="timer-warning" id="timerWarning">Si recargas la página, el cronómetro sigue corriendo.</p><div class="progress-track"><div class="progress-fill" style="width:${answered/18*100}%"></div></div><section class="question-card"><div class="q-top"><span class="mono">PREGUNTA ${String(i+1).padStart(2,'0')} / 18</span><span class="mono">${ESC(q.categoria)}</span></div><h2>${ESC(q.pregunta)}</h2><div class="options" role="radiogroup" aria-label="Opciones de respuesta">${q.opciones.map((o,j)=>`<button type="button" class="option ${q.seleccion===o.id?'selected':''}" data-answer="${ESC(o.id)}" role="radio" aria-checked="${q.seleccion===o.id}"><span class="letter">${'ABCD'[j]}</span><span>${ESC(o.texto)}</span></button>`).join('')}</div><p class="save-status" id="saveStatus">${q.seleccion?'✓ Respuesta guardada':'Selecciona una respuesta: guardamos cada elección automáticamente.'}</p></section><div class="exam-actions"><button data-step="previous" ${i===0?'disabled':''}>← Anterior</button><span class="mono muted">${answered} de 18 guardadas</span><button class="primary" id="nextStep" data-step="next" ${q.seleccion===null?'disabled':''}>${i===17?'Entregar examen':'Siguiente →'}</button></div><p class="auth-error" id="finishError" hidden></p><p class="auth-note">Actualizar, cerrar o abrir otra pestaña NO reinicia el examen. El tiempo se cuenta en Supabase.</p></div>`;
+ const n=document.getElementById('nextStep');if(i===17)n.textContent=answered===18?'Entregar examen':'Ir a pendientes';
+ document.getElementById('leaveExam').addEventListener('click',()=>{stopClock();exam=null;sessionStorage.removeItem('sommo_active_assignment_v7');navigate('staff')});
+ updateClock();
 }
 async function saveAnswer(answer){
- if(!exam||busy)return;busy=true;
- const idx=exam.index,q=exam.items[idx];
+ if(!exam||busy)return;busy=true;const idx=exam.index,q=exam.items[idx];
  document.querySelectorAll('[data-answer]').forEach(b=>b.disabled=true);
- const st=document.getElementById('saveStatus');if(st)st.textContent='Guardando en Supabase…';
+ const status=document.getElementById('saveStatus');if(status)status.textContent='Guardando en Supabase…';
  try{
-   const {error}=await client.rpc('sommo_personal_responder',{
-      p_token:staffToken,p_intento:exam.id,p_pregunta:q.id,p_opcion:answer});
+   const {data,error}=await client.rpc('sommo_personal_responder',{p_token:staffToken,p_intento:exam.id,p_pregunta:q.id,p_opcion:answer});
    if(error)throw error;
+   if(data===false){await syncExamClock();return}
    q.seleccion=answer;renderExam();
- }catch(ex){
-   if(st){st.textContent='Error al guardar. Reintenta tu respuesta: '+(ex.message||'Error de conexión');st.style.color='#fdb9aa'}
-   document.querySelectorAll('[data-answer]').forEach(b=>b.disabled=false);
- }finally{busy=false}
+ }catch(err){if(status){status.textContent='No se guardó: '+(err.message||'Revisa tu conexión');status.style.color='#9c4035'}document.querySelectorAll('[data-answer]').forEach(b=>b.disabled=false)}
+ finally{busy=false}
 }
 async function finishExam(){
  if(!exam||busy)return;
- if(exam.items.some(x=>!x.seleccion)){const ix=exam.items.findIndex(x=>!x.seleccion);exam.index=ix;renderExam();return}
- if(!confirm('¿Entregar este examen? Después no podrás modificarlo ni reiniciarlo.'))return;
- busy=true;const b=document.getElementById('nextStep');b.disabled=true;b.textContent='Calificando en Supabase…';
+ if(exam.items.some(q=>!q.seleccion)){exam.index=exam.items.findIndex(q=>!q.seleccion);renderExam();return}
+ if(!confirm('¿Entregar el examen? No podrás modificarlo ni repetirlo libremente.'))return;
+ busy=true;const btn=document.getElementById('nextStep');if(btn){btn.disabled=true;btn.textContent='Calificando…'}
  try{
-   const {data,error}=await client.rpc('sommo_personal_finalizar',{p_token:staffToken,p_intento:exam.id});
-   if(error)throw error;
+   const {data,error}=await client.rpc('sommo_personal_finalizar',{p_token:staffToken,p_intento:exam.id});if(error)throw error;
+   stopClock();sessionStorage.removeItem('sommo_active_assignment_v7');
    latestResult={...data,name:exam.name,type:exam.type,periodo:exam.periodo};exam=null;navigate('results');
- }catch(ex){setError('finishError','No se pudo entregar: '+(ex.message||String(ex)));b.disabled=false;b.textContent='Entregar examen'}
+ }catch(err){setError('finishError','No pudimos entregar: '+(err.message||String(err)));if(btn){btn.disabled=false;btn.textContent='Entregar examen'}}
  finally{busy=false}
 }
 function renderResults(){
  if(!latestResult){navigate('staff');return}
  const r=latestResult;
- main.innerHTML=`<div class="wrap screen"><div class="eyebrow">EVALUACIÓN ENTREGADA / ${ESC(TYPE(r.type))}</div><h1 class="intro-title">Un intento.<br><em>Un resultado.</em></h1><div class="results-hero"><div><span class="mono">${ESC(r.name)} · ${ESC(r.periodo)}</span><h2 style="font:400 41px var(--serif);margin:14px 0 8px">Evaluación finalizada.</h2><div class="result-meta">${r.aciertos} de 18 respuestas correctas · Guardado en Supabase</div></div><div class="score">${r.porcentaje}<span style="font-size:29px">%</span></div></div><p class="result-note">Este intento quedó cerrado. Solo gerencia puede asignar otro. Por seguridad, el banco de respuestas no se muestra a los participantes; pide retroalimentación a tu encargado.</p><div class="actions-row"><button data-page="staff">Mis evaluaciones →</button><button data-page="home">Volver al inicio</button></div></div>`;
+ main.innerHTML=`<div class="wrap screen"><div class="eyebrow">EVALUACIÓN ENTREGADA / ${ESC(TYPE(r.type))}</div><h1 class="intro-title">Un intento.<br><em>Un resultado.</em></h1><div class="results-hero"><div><span class="mono">${ESC(r.name)} · ${ESC(r.periodo)}</span><h2 style="font:400 41px var(--serif);margin:14px 0 8px">Evaluación finalizada.</h2><div class="result-meta">${r.aciertos} de 18 respuestas correctas · Guardado en Supabase</div></div><div class="score">${r.porcentaje}<span style="font-size:29px">%</span></div></div><p class="result-note">Este intento quedó cerrado. Solo gerencia puede asignar otro. Por seguridad, el banco de respuestas no se muestra a los participantes; pide retroalimentación a tu encargado.</p><div class="actions-row"><button id="resultLogout">Terminar y salir de este dispositivo ↗</button><button data-page="staff">Mis evaluaciones</button></div><p class="auth-note">En dispositivos compartidos, cierra tu acceso para que el siguiente compañero se identifique con su propio nombre.</p></div>`;
+ document.getElementById('resultLogout')?.addEventListener('click',logoutStaff);
 }
 function renderManager(){
  main.innerHTML=`<div class="wrap screen"><button class="back" data-page="home">← Volver al inicio</button><div class="eyebrow" style="margin-top:20px">GERENCIA / ACCESO PRIVADO</div><h1 class="intro-title">Control de<br><em>evaluaciones.</em></h1><p class="intro-lede">La gerencia es la única que inicia sesión con una cuenta de Supabase. Puede registrar empleados, asignar nuevos intentos y ver resultados.</p>
  ${managerReady?`<div class="accountbox"><div><strong>Acceso gerencial autorizado</strong><small>Las acciones del panel se verifican desde Supabase.</small></div><button id="managerLogout">Cerrar sesión ↗</button></div><div id="managerPanel" style="margin-top:30px"><p class="auth-note">Cargando panel…</p></div>`:
- `<div class="intro-panel"><form class="panel" id="managerLogin"><h3>Acceso del gerente</h3><div class="field"><label for="adminEmail">Correo de gerencia</label><input id="adminEmail" type="email" autocomplete="email" placeholder="gerencia@correo.com" required></div><div class="field"><label for="adminPass">Contraseña</label><input id="adminPass" type="password" autocomplete="current-password" required></div><button class="wide-btn" id="managerBtn" type="submit">Entrar al panel ↗</button><button type="button" class="ghost-link" data-page="recover" style="display:block;margin-top:18px;border:0;background:none;color:#e9e3d5">Recuperar contraseña de gerencia →</button><p class="auth-error" id="adminError" hidden></p></form><aside class="panel"><span class="pill">ACCESO PRIVADO</span><div class="tip-list"><div class="tip"><b>Solo gerente.</b><br>El rol se autoriza en la base de datos. No basta con tener correo y contraseña.</div><div class="tip"><b>Control de intentos.</b><br>Un nuevo examen se asigna aquí, nunca desde el teléfono del mesero.</div><div class="tip"><b>Resultados de equipo.</b><br>Calificaciones, evaluaciones pendientes e intentos en curso.</div></div></aside></div>`}</div>`;
+ `<div class="intro-panel"><form class="panel" id="managerLogin"><h3>Acceso del gerente</h3><div class="field"><label for="adminEmail">Correo de gerencia</label><input id="adminEmail" type="email" autocomplete="email" placeholder="gerencia@correo.com" required></div><div class="field"><label for="adminPass">Contraseña</label><input id="adminPass" type="password" autocomplete="current-password" required></div><button class="wide-btn" id="managerBtn" type="submit">Entrar al panel ↗</button><button type="button" class="ghost-link" data-page="recover" style="display:block;margin-top:18px;border:0;background:none;color:#e9e3d5">Recuperar contraseña de gerencia →</button><p class="auth-error" id="adminError" hidden></p></form><aside class="panel"><span class="pill">ACCESO PRIVADO</span><div class="tip-list"><div class="tip"><b>Solo gerente.</b><br>El rol se autoriza en la base de datos. No basta con tener correo y contraseña.</div><div class="tip"><b>Control de intentos.</b><br>Cada persona se registra sola. Solo casos excepcionales requieren autorizar otro intento.</div><div class="tip"><b>Resultados de equipo.</b><br>Calificaciones, evaluaciones pendientes e intentos en curso.</div></div></aside></div>`}</div>`;
  if(managerReady){
    document.getElementById('managerLogout')?.addEventListener('click',async()=>{await client.auth.signOut();managerReady=false;managerData=null;navigate('dashboard')});
    loadManagerPanel();
@@ -239,34 +309,27 @@ function renderManager(){
 async function loadManagerPanel(){
  const dest=document.getElementById('managerPanel');if(!dest)return;
  const {data,error}=await client.rpc('sommo_gerente_panel');if(view!=='dashboard')return;
- if(error){dest.innerHTML=`<p class="auth-error">${ESC(error.message)}. Comprueba que instalaste el SQL y que tu usuario tiene rol de gerente.</p>`;return}
+ if(error){dest.innerHTML=`<p class="auth-error">${ESC(error.message)}. Verifica el rol privado de gerencia en Supabase.</p>`;return}
  managerData=data;
  const people=data.empleados||[],a=data.evaluaciones||[];
  const finished=a.filter(x=>x.estado==='finalizado'),progress=a.filter(x=>x.estado==='en_curso');
+ const suspicious=people.filter(x=>x.posible_duplicado);
  const period=new Date().toISOString().slice(0,7);
- dest.innerHTML=`<div class="manager-stats"><div class="manager-stat"><b>${people.length}</b><small>PERSONAL REGISTRADO</small></div><div class="manager-stat"><b>${finished.length}</b><small>EXÁMENES ENTREGADOS</small></div><div class="manager-stat"><b>${progress.length}</b><small>EXÁMENES EN CURSO</small></div></div>
- <div class="admin-grid">
- <form class="panel" id="createEmployee"><h3>Registrar empleado.</h3><div class="field"><label>Nombre completo</label><input name="nombre" required minlength="3" maxlength="100" placeholder="Mariana García"></div><div class="field"><label>Código de empleado</label><input name="codigo" required minlength="4" maxlength="20" placeholder="SOMMO-009" pattern="[A-Za-z0-9-]{4,20}"></div><div class="field"><label>PIN de seis números</label><input name="pin" type="password" autocomplete="new-password" required pattern="[0-9]{6}" maxlength="6" inputmode="numeric"></div><button class="wide-btn" type="submit">Registrar personal ↗</button><p class="auth-error" id="createError" hidden></p></form>
- <form class="panel" id="assignEmployee"><h3>Asignar examen.</h3><div class="field"><label>Empleado</label><select name="empleado" required><option value="">Selecciona</option>${people.map(p=>`<option value="${ESC(p.id)}">${ESC(p.nombre)} · ${ESC(p.codigo)}</option>`).join('')}</select></div><div class="field"><label>Evaluación</label><select name="tipo" required><option value="ingreso">Nuevo ingreso</option><option value="piso">Primer día en piso</option><option value="recurrente">Recurrente</option></select></div><div class="field"><label>Periodo / ciclo</label><input name="periodo" maxlength="32" value="${ESC(period)}" required></div><button class="wide-btn" type="submit">Autorizar intento ↗</button><p class="auth-error" id="assignError" hidden></p><p class="auth-note">Si el anterior está completado, crea un intento 2 sin borrar el resultado previo.</p></form>
- <form class="panel" id="changePin"><h3>Cambiar PIN.</h3><div class="field"><label>Empleado</label><select name="empleado" required><option value="">Selecciona</option>${people.map(p=>`<option value="${ESC(p.id)}">${ESC(p.nombre)} · ${ESC(p.codigo)}</option>`).join('')}</select></div><div class="field"><label>Nuevo PIN (6 números)</label><input name="pin" type="password" pattern="[0-9]{6}" maxlength="6" inputmode="numeric" required></div><button class="wide-btn" type="submit">Actualizar PIN ↗</button><p class="auth-error" id="pinError" hidden></p></form>
- </div><h2 style="font:400 44px var(--serif);margin:50px 0 20px">Historial del equipo.</h2><div class="table-scroll"><table class="results-table"><thead><tr><th>EMPLEADO</th><th>EXAMEN</th><th>PERIODO</th><th>INTENTO</th><th>ESTADO</th><th>RESULTADO</th></tr></thead><tbody>${a.map(x=>`<tr><td>${ESC(x.nombre)}<br><span class="muted">${ESC(x.codigo)}</span></td><td>${ESC(TYPE(x.tipo))}</td><td>${ESC(x.periodo)}</td><td>${x.numero}</td><td>${x.estado==='finalizado'?'Finalizado':x.estado==='en_curso'?'En curso':'Pendiente'}</td><td>${x.aciertos!==null?`${x.aciertos}/18 · ${Math.round(x.aciertos/18*100)}%`:'—'}</td></tr>`).join('')||'<tr><td colspan="6">Todavía no hay evaluaciones asignadas.</td></tr>'}</tbody></table></div><p class="auth-note" style="margin-top:17px">PILOTO: los 250 reactivos siguen pendientes de aprobación por SOMMO. Solo la cuenta marcada como empleado de prueba puede usar preguntas sin validar.</p>`;
- async function submitAction(id,rpc,keys,errorId){
-    document.getElementById(id).addEventListener('submit',async e=>{
-      e.preventDefault();if(busy)return;busy=true;
-      const f=e.currentTarget,b=f.querySelector('[type="submit"]');b.disabled=true;
-      setError(errorId,'');
-      const obj={};for(const [formKey,apiKey] of Object.entries(keys))obj[apiKey]=f.elements.namedItem(formKey)?.value.trim();
-      try{const {error}=await client.rpc(rpc,obj);if(error)throw error;await loadManagerPanel()}
-      catch(ex){setError(errorId,ex.message||'No fue posible completar la operación');b.disabled=false}
-      finally{busy=false}
-    });
- }
- submitAction('createEmployee','sommo_gerente_crear_empleado',
-   {nombre:'p_nombre',codigo:'p_codigo',pin:'p_pin'},'createError');
- submitAction('assignEmployee','sommo_gerente_asignar',
-   {empleado:'p_empleado',tipo:'p_tipo',periodo:'p_periodo'},'assignError');
- submitAction('changePin','sommo_gerente_cambiar_pin',
-   {empleado:'p_empleado',pin:'p_pin'},'pinError');
+ dest.innerHTML=`<div class="manager-stats"><div class="manager-stat"><b>${people.length}</b><small>PERSONAL REGISTRADO</small></div><div class="manager-stat"><b>${finished.length}</b><small>EXÁMENES ENTREGADOS</small></div><div class="manager-stat"><b>${progress.length}</b><small>EN CURSO</small></div></div>
+ <p class="manager-note">Los meseros se registran y presentan exámenes por su cuenta. La gerencia solo consulta resultados y, excepcionalmente, autoriza otra oportunidad.</p>
+ ${suspicious.length?`<div class="manager-warning"><b>Revisar identidad:</b> ${suspicious.length} registro(s) con nombres repetidos. Los teléfonos no se verifican por SMS. ${suspicious.map(p=>ESC(p.nombre)).join(' · ')}</div>`:''}
+ <h2 style="font:400 44px var(--serif);margin:40px 0 19px">Personal y resultados.</h2><div class="field" style="max-width:420px"><label for="managerSearch">Buscar por nombre</label><input id="managerSearch" placeholder="Nombre del mesero" autocomplete="off"></div>
+ <div class="table-scroll"><table class="results-table"><thead><tr><th>EMPLEADO</th><th>EVALUACIÓN</th><th>ESTADO / INICIO</th><th>NOTA</th><th>REAPERTURAS</th></tr></thead><tbody>${a.map(x=>`<tr class="manager-result-row" data-staff-name="${ESC(x.nombre.toLocaleLowerCase('es'))}"><td><strong>${ESC(x.nombre)}</strong><br><span class="muted">${ESC((people.find(p=>p.id===x.empleado_id)||{}).telefono_final||'Teléfono no registrado')}</span></td><td>${ESC(TYPE(x.tipo))}<br><span class="muted">${ESC(x.periodo)} · #${x.numero}</span></td><td>${x.estado==='finalizado'?(x.motivo==='tiempo'?'Tiempo agotado':'Finalizado'):x.estado==='en_curso'?'En curso':'Pendiente'}${x.inicio?`<br><span class="muted">Inició ${ESC(formatDateTime(x.inicio))}</span>`:''}</td><td>${x.aciertos!==null?`${x.aciertos}/18 · ${Math.round(x.aciertos/18*100)}%`:'—'}</td><td>${Number(x.reanudaciones||0)}</td></tr>`).join('')||'<tr><td colspan="5">Todavía no hay evaluaciones.</td></tr>'}</tbody></table></div>
+ <p class="auth-note">Reaperturas: veces que alguien volvió a abrir el mismo intento, incluso por recarga o por regresar después. No demuestra trampa.</p>
+ <details class="manager-exception"><summary>Autorización excepcional de un nuevo intento</summary><form id="assignEmployee"><div class="field"><label>Empleado</label><select name="empleado" required><option value="">Selecciona</option>${people.map(p=>`<option value="${ESC(p.id)}">${ESC(p.nombre)}</option>`).join('')}</select></div><div class="field"><label>Evaluación</label><select name="tipo"><option value="ingreso">Nuevo ingreso</option><option value="piso">Primer día en piso</option><option value="recurrente">Recurrente</option></select></div><div class="field"><label>Periodo</label><input name="periodo" maxlength="32" value="${ESC(period)}" required></div><button class="wide-btn" type="submit">Autorizar otro intento ↗</button><p class="auth-error" id="assignError" hidden></p></form></details>
+ <p class="auth-note" style="margin-top:20px">${data.modo_piloto?'PILOTO: Las 250 preguntas siguen pendientes de aprobación por SOMMO.':'Banco aprobado: verificar validaciones antes de operar.'} · Los teléfonos declarados no se comprueban por SMS.</p>`;
+ document.getElementById('managerSearch')?.addEventListener('input',e=>{const q=e.target.value.toLocaleLowerCase('es').trim();document.querySelectorAll('.manager-result-row').forEach(row=>row.hidden=!row.dataset.staffName.includes(q))});
+ document.getElementById('assignEmployee')?.addEventListener('submit',async e=>{
+   e.preventDefault();if(busy)return;busy=true;const form=e.currentTarget,b=form.querySelector('[type="submit"]');b.disabled=true;
+   setError('assignError','');try{
+     const {error}=await client.rpc('sommo_gerente_asignar',{p_empleado:form.elements.empleado.value,p_tipo:form.elements.tipo.value,p_periodo:form.elements.periodo.value.trim()});if(error)throw error;await loadManagerPanel();
+   }catch(err){setError('assignError',err.message||'No se pudo asignar');b.disabled=false}finally{busy=false}
+ });
 }
 function renderRecover(){
  main.innerHTML=`<div class="wrap screen"><button class="back" data-page="dashboard">← Acceso gerencial</button><div class="eyebrow">GERENCIA / RECUPERACIÓN</div><h1 class="intro-title">Recuperar<br><em>contraseña.</em></h1><div class="panel" style="max-width:550px"><form id="recoverForm"><div class="field"><label>Correo registrado en Supabase Authentication</label><input id="recoverEmail" type="email" required></div><button class="wide-btn" type="submit">Enviar enlace de recuperación ↗</button><p class="auth-error" id="recoverError" hidden></p><p class="auth-note">El envío de correos está sujeto al límite de Supabase. El enlace debe apuntar a esta web en Authentication → URL Configuration.</p></form></div></div>`;
@@ -311,7 +374,8 @@ mob.addEventListener('click',()=>{const open=nav.classList.toggle('open');mob.se
  if(staffToken){
    try{const {data,error}=await client.rpc('sommo_personal_evaluaciones',{p_token:staffToken});
      if(error)throw error;staffProfile={nombre:data.nombre,codigo:data.codigo};if(view==='home')navigate('home');
-   }catch{staffToken='';staffProfile=null;localStorage.removeItem('sommo_staff_token_v6')}
+     const active=sessionStorage.getItem('sommo_active_assignment_v7');if(active)await openAssignment(active);
+   }catch{staffToken='';staffProfile=null;sessionStorage.removeItem('sommo_staff_token_v7')}
  }
  const currentHash=location.hash||'';
  if(/error_code=otp_expired|error_description=.*expired/i.test(currentHash)){
