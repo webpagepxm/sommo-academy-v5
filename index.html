@@ -122,9 +122,61 @@
 }
 
 </style>
+<style>
+
+/* V8.1: rutas de aprendizaje y evaluación bien separadas, especialmente en móvil. */
+.home-quickstart,.home-mobile-title{display:none}
+@media(max-width:700px){
+  /* La elección debe aparecer antes que las historias, fotografías y listados. */
+  .home-quickstart{display:block;background:#131711;color:#f1efe9;border-bottom:1px solid #383f35}
+  .quickstart-inner{padding-top:31px;padding-bottom:32px}
+  .quickstart-heading{margin-bottom:25px}
+  .quickstart-heading .eyebrow{font-size:10px;color:#b8b8ab;letter-spacing:.11em}
+  .quickstart-heading h1{font:400 clamp(46px,12vw,68px)/.96 var(--serif);letter-spacing:-.04em;margin:16px 0 13px}
+  .quickstart-heading h1 em{color:#c7bdad;font-weight:400}
+  .quickstart-heading p{font-size:14px;color:#b8bbae;line-height:1.65;margin:0;max-width:32ch}
+  .quickstart-options{display:grid;grid-template-columns:1fr;gap:13px}
+  .quick-option{padding:24px 23px 23px;min-width:0;display:flex;flex-direction:column;gap:0;border-radius:0}
+  .quick-option--study{background:#eae5da;color:#1e261d;border:1px solid #eae5da}
+  .quick-option--exam{background:#202b22;color:#f5f1e8;border:1px solid #728273}
+  .quick-option-top{display:flex;justify-content:space-between;gap:9px;align-items:start;font:10px var(--mono);letter-spacing:.04em;line-height:1.5}
+  .quick-pill{display:inline-block;border:1px solid currentColor;padding:5px 7px;font:9px var(--mono);opacity:.8;letter-spacing:0;text-align:center}
+  .quick-option h2{font:400 clamp(46px,12vw,60px)/.95 var(--serif);letter-spacing:-.03em;margin:25px 0 13px}
+  .quick-option h2 em{font-weight:400;opacity:.8}
+  .quick-option p{font-size:14px;line-height:1.7;margin:0 0 23px;max-width:38ch;opacity:.88}
+  .quick-option button{width:100%;background:#18211a;color:#f3eee6;border:1px solid #18211a;min-height:53px;padding:12px 17px;font-size:13px;font-weight:700;text-align:center;letter-spacing:.005em;border-radius:0}
+  .quick-option--exam button{background:#e4d9c7;color:#1e261d;border-color:#e4d9c7}
+  .quick-option button:focus-visible{outline:3px solid #9aa998;outline-offset:3px}
+  /* Ocultar duplicados de marketing para que no compitan con las dos rutas. */
+  .hero,.study-home-section,.home-account-banner{display:none}
+  .home-mobile-title{display:inline}
+  .home-desktop-title{display:none}
+  .paper .section{padding-top:42px;padding-bottom:54px}
+  .paper .section-heading{margin-bottom:23px;padding-bottom:23px}
+  .paper .section-heading .eyebrow{font-size:10px;color:#676a62}
+  .paper .section-heading h2{font-size:clamp(42px,11vw,58px);line-height:.96;margin:14px 0 0}
+  .paper .section-heading p{font-size:13px;line-height:1.7;margin-top:16px;max-width:36ch}
+  .cards{gap:11px}
+  .stage{min-height:235px;padding:24px 22px}
+  .stage h3{font-size:clamp(40px,11.7vw,55px);margin:18px 0 11px}
+  .stage p{font-size:13px;line-height:1.65}
+  .stage button{border-top-color:#b2afa6;padding-top:16px;font-size:13px;min-height:48px}
+  /* El manual queda como lectura complementaria, no como un tercer recorrido principal. */
+  .academy-section{padding-top:36px;padding-bottom:42px;background:#171d18}
+  .academy-section .academy-grid{gap:0}
+  .academy-section .eyebrow{font-size:10px}
+  .academy-section h2{font-size:clamp(38px,10vw,48px);line-height:1;margin:16px 0 13px}
+  .academy-section p{font-size:13px;line-height:1.7;margin:0}
+  .academy-section .academy-note{display:none}
+  .academy-cta{font-size:13px;min-height:48px;width:100%;margin-top:22px;text-align:center}
+  /* Priorizar el estudio o el examen también desde el menú hamburguesa. */
+  .nav button[data-page="study"],.nav button#accountNav{font-weight:700}
+  .nav button[data-page="staff"]:not(#accountNav),.nav .nav-outline{display:none}
+}
+</style>
 </head>
 <body>
-<div class="topline">SOMMO / FORMACIÓN INTERNA · V8 PILOTO</div>
+<div class="topline">SOMMO / FORMACIÓN INTERNA · V8.1 PILOTO</div>
 <header class="wrap top">
   <a href="#inicio" class="brand" data-page="home" aria-label="SOMMO Academy inicio">
     <img src="https://cdn.prod.website-files.com/630a7f61ece7db6e1ffb2ff7/68484239fac612f59d2e4f58_Logos%20SOMMO-03%20Brand%20H%20beige.svg" alt="SOMMO Sushi Bar & Cocktails" onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMTAwIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEwMCI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMxMDExMGYiLz48dGV4dCB4PSI1IiB5PSI1MiIgZmlsbD0iI2VjZThkZSIgZm9udC1mYW1pbHk9IkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjYyIiBsZXR0ZXItc3BhY2luZz0iLTMiPlNPTU1PPC90ZXh0Pjx0ZXh0IHg9IjYiIHk9IjgyIiBmaWxsPSIjZWNlOGRlIiBmb250LWZhbWlseT0iQXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtc2l6ZT0iMTciIGxldHRlci1zcGFjaW5nPSIyIj5TVVNISSBCQVIgJmFtcDsgQ09DS1RBSUxTPC90ZXh0Pjwvc3ZnPgo='">
@@ -265,7 +317,7 @@ function studyTotals(cat){const marks=loadStudyMarks();const c=STUDY_CARDS.filte
 function renderStudy(){
  const {total,learned}=studyTotals(studyCategory);
  const cats=Object.entries(STUDY_CATEGORIES).map(([id,c])=>`<button class="study-tab ${studyCategory===id?'active':''}" data-study-cat="${id}" aria-pressed="${studyCategory===id}">${ESC(c.label)}<span>${studyTotals(id).total}</span></button>`).join('');
- main.innerHTML=`<div class="wrap screen study-screen"><button class="back" data-page="home">Volver al inicio</button><div class="eyebrow" style="margin-top:20px">SOMMO ACADEMY / APRENDER</div><h1 class="intro-title">Guía de<br><em>estudio.</em></h1><p class="intro-lede">Aprende la carta por asociaciones sencillas. Primero recuerda las palabras clave; después voltea la tarjeta. Sin cronómetro y sin calificación.</p><div class="study-tabs" role="group" aria-label="Módulos de estudio">${cats}</div><div class="study-utility"><div class="study-count"><b>${learned} / ${total}</b><span>tarjetas aprendidas en este módulo</span><div class="study-track"><div style="width:${total?100*learned/total:0}%"></div></div></div><div class="study-disclaimer">Avance guardado solo en este navegador${staffProfile?' para este empleado':''}. No se suma al examen ni al dashboard.</div></div><div class="study-controls"><label>Familia<select id="studyGroup"></select></label><label>Buscar<input id="studySearch" type="search" autocomplete="off" placeholder="Platillo, ingrediente o palabra clave…" value="${ESC(studyQuery)}"></label><label>Mostrar<select id="studyMode"><option value="todas">Todas</option><option value="repasar">Por repasar</option><option value="aprendidas">Aprendidas</option></select></label></div><div id="studyCanvas" aria-live="polite"></div><div class="study-footer"><p>Esta guía resume información publicada por SOMMO. Preparaciones, cambios de temporada, disponibilidad y alérgenos deben confirmarse con cocina o barra.</p><a href="https://www.sommo.mx/es/menu/gastronomia" target="_blank" rel="noopener noreferrer">Carta de gastronomía</a><a href="https://www.sommo.mx/es/menu/cocteleria" target="_blank" rel="noopener noreferrer">Carta de coctelería</a></div><div class="actions-row"><button data-page="staff">Ir a mis evaluaciones</button><button data-page="manual">Leer protocolos de servicio</button></div></div>`;
+ main.innerHTML=`<div class="wrap screen study-screen"><button class="back" data-page="home">Volver al inicio</button><div class="eyebrow" style="margin-top:20px">MODO ESTUDIO / SIN CRONÓMETRO</div><h1 class="intro-title">Guía de<br><em>estudio.</em></h1><p class="intro-lede">Aprende la carta por asociaciones sencillas. Primero recuerda las palabras clave; después voltea la tarjeta. Sin cronómetro y sin calificación.</p><div class="study-tabs" role="group" aria-label="Módulos de estudio">${cats}</div><div class="study-utility"><div class="study-count"><b>${learned} / ${total}</b><span>tarjetas aprendidas en este módulo</span><div class="study-track"><div style="width:${total?100*learned/total:0}%"></div></div></div><div class="study-disclaimer">Avance guardado solo en este navegador${staffProfile?' para este empleado':''}. No se suma al examen ni al dashboard.</div></div><div class="study-controls"><label>Familia<select id="studyGroup"></select></label><label>Buscar<input id="studySearch" type="search" autocomplete="off" placeholder="Platillo, ingrediente o palabra clave…" value="${ESC(studyQuery)}"></label><label>Mostrar<select id="studyMode"><option value="todas">Todas</option><option value="repasar">Por repasar</option><option value="aprendidas">Aprendidas</option></select></label></div><div id="studyCanvas" aria-live="polite"></div><div class="study-footer"><p>Esta guía resume información publicada por SOMMO. Preparaciones, cambios de temporada, disponibilidad y alérgenos deben confirmarse con cocina o barra.</p><a href="https://www.sommo.mx/es/menu/gastronomia" target="_blank" rel="noopener noreferrer">Carta de gastronomía</a><a href="https://www.sommo.mx/es/menu/cocteleria" target="_blank" rel="noopener noreferrer">Carta de coctelería</a></div><div class="actions-row"><button data-page="staff">Ir a mis evaluaciones</button><button data-page="manual">Leer protocolos de servicio</button></div></div>`;
  const groups=['Todas',...new Set(STUDY_CARDS.filter(c=>c.cat===studyCategory).map(c=>c.group))];
  document.getElementById('studyGroup').innerHTML=groups.map(g=>`<option value="${ESC(g)}" ${g===studyGroup?'selected':''}>${ESC(g)}</option>`).join('');
  document.getElementById('studyMode').value=studyMode;
@@ -294,7 +346,7 @@ let view='home',selectedExamType='nuevo',exam=null,latestResult=null,busy=false,
     managerFilters={periodo:'30d',pagina:1,limite:25,busqueda:''},managerRequestSerial=0,managerSearchTimer=null,staffSearchTimer=null;
 function goTop(){window.scrollTo(0,0)}
 function setError(id,msg){const el=document.getElementById(id);if(el){el.textContent=msg;el.hidden=!msg}}
-function navState(){const el=document.getElementById('accountNav');if(el)el.textContent=staffProfile?'Mi evaluación':'Acceso personal';}
+function navState(){const el=document.getElementById('accountNav');if(el)el.textContent=staffProfile?'Mis evaluaciones':'Presentar evaluación';}
 function navigate(page,opts={}){
  view=page;nav.classList.remove('open');mob.setAttribute('aria-expanded','false');
  if(page==='home'){renderHome();showAccountBanner()}
@@ -313,18 +365,37 @@ function navigate(page,opts={}){
 }
 function showAccountBanner(){
  const hero=main.querySelector('.hero');if(!hero)return;
- const banner=document.createElement('div');banner.className='wrap';
+ const banner=document.createElement('div');banner.className='wrap home-account-banner';
  banner.innerHTML=`<div class="accountbox"><div><strong>${staffProfile?'Personal: '+ESC(staffProfile.nombre):'Personal de SOMMO · acceso sin correo'}</strong><small>${staffProfile?'Tus respuestas se guardan mientras avanzas. Cerrar la página no reinicia el examen.':'¿Es tu primera vez? Regístrate con tu nombre y teléfono. Si ya tienes expediente, entra con tu PIN.'}</small></div><button type="button" data-page="staff">${staffProfile?'Mis evaluaciones ':'Identificarme '}</button></div>`;
  hero.before(banner);
 }
-function renderHome(){main.innerHTML=`<div class="wrap hero">
+function renderHome(){main.innerHTML=`<section class="home-quickstart" aria-label="Elige cómo usar SOMMO Academy">
+  <div class="wrap quickstart-inner">
+    <div class="quickstart-heading"><div class="eyebrow">SOMMO ACADEMY / FORMACIÓN INTERNA</div><h1>¿Qué quieres<br><em>hacer hoy?</em></h1><p>Primero aprende la carta. Cuando estés listo, presenta tu evaluación.</p></div>
+    <div class="quickstart-options">
+      <article class="quick-option quick-option--study">
+        <div class="quick-option-top"><span>01 / APRENDER</span><span class="quick-pill">SIN CRONÓMETRO</span></div>
+        <h2>Guía de<br><em>estudio.</em></h2>
+        <p>Repasa los platillos, las bebidas y el servicio con tarjetas interactivas. Puedes volver cuando quieras.</p>
+        <button type="button" data-page="study">Abrir guía de estudio</button>
+      </article>
+      <article class="quick-option quick-option--exam">
+        <div class="quick-option-top"><span>02 / EVALUARTE</span><span class="quick-pill">INTENTO REGISTRADO</span></div>
+        <h2>Presentar<br><em>evaluación.</em></h2>
+        <p>18 preguntas, 20 minutos y un intento por evaluación. Tus respuestas y calificación se guardan.</p>
+        <button type="button" data-page="staff">Ver mis evaluaciones</button>
+      </article>
+    </div>
+  </div>
+</section>
+<div class="wrap hero">
  <div class="hero-left"><div class="hero-main"><div class="eyebrow">KNOWLEDGE · SERVICE · HOSPITALITY</div><h1>Good service.<br><em>By design.</em></h1><p class="lede">Una experiencia de hospitalidad comienza con personas preparadas. Aprende, practica y evalúa tu conocimiento de servicio y nuestra carta.</p><div class="hero-actions"><button class="text-btn" data-page="study">Explorar la guía de estudio</button><button class="ghost-link" data-page="home" data-scroll="evaluaciones">Ver evaluaciones</button></div></div><div class="hero-caption"><span>TRAINING PROGRAM / 2026</span><span>PUERTO ESCONDIDO, OAXACA</span></div></div>
  <div class="hero-media"><img class="foodphoto" src="https://cdn.prod.website-files.com/630a7f61ece7db6e1ffb2ff7/66b19a2fea360c995e6de414_nigiri%20kamatoro.jpg" alt="Nigiri de SOMMO" onerror="this.style.display='none'"><div class="photo-copy"><span>UNA CULTURA<br>DE SERVICIO</span><b>01—03</b></div></div></div>
- <section class="study-home-section"><div class="wrap study-home-wrap"><div><div class="eyebrow">01 / APRENDE A TU RITMO</div><h2>Conoce la carta.<br><em>Recuerda cada detalle.</em></h2><p>Tarjetas para asociar ingredientes, perfiles y conceptos de servicio. Puedes voltearlas, buscar un platillo y guardar lo que te falta repasar.</p><button class="text-btn" data-page="study">Abrir guía de estudio</button></div><div class="study-home-grid"><button type="button" data-study-shortcut="comida"><span>Gastronomía</span><small>PLATILLOS Y MAKIS</small></button><button type="button" data-study-shortcut="bebidas"><span>Coctelería</span><small>PERFILES Y DESTILADOS</small></button><button type="button" data-study-shortcut="cultura"><span>Cultura y servicio</span><small>VOCABULARIO Y PISO</small></button></div></div></section>
- <section class="paper"><div class="wrap section" id="evaluaciones"><div class="section-heading"><div><div class="eyebrow">01 / EL PROGRAMA</div><h2>Tres momentos.<br><em>Un estándar.</em></h2></div><p>Evaluaciones diferentes para cada etapa de aprendizaje. Todas tienen 18 preguntas y 20 minutos de tiempo continuo.</p></div><div class="cards">
+ <section class="study-home-section"><div class="wrap study-home-wrap"><div><div class="eyebrow">01 / GUÍA DE ESTUDIO</div><h2>Conoce la carta.<br><em>Recuerda cada detalle.</em></h2><p>Tarjetas para asociar ingredientes, perfiles y conceptos de servicio. Puedes voltearlas, buscar un platillo y guardar lo que te falta repasar.</p><button class="text-btn" data-page="study">Abrir guía de estudio</button></div><div class="study-home-grid"><button type="button" data-study-shortcut="comida"><span>Gastronomía</span><small>PLATILLOS Y MAKIS</small></button><button type="button" data-study-shortcut="bebidas"><span>Coctelería</span><small>PERFILES Y DESTILADOS</small></button><button type="button" data-study-shortcut="cultura"><span>Cultura y servicio</span><small>VOCABULARIO Y PISO</small></button></div></div></section>
+ <section class="paper"><div class="wrap section" id="evaluaciones"><div class="section-heading"><div><div class="eyebrow">02 / EVALUACIONES</div><h2><span class="home-desktop-title">Tres momentos.<br><em>Un estándar.</em></span><span class="home-mobile-title">Tres exámenes.<br><em>Una formación.</em></span></h2></div><p><span class="home-desktop-title">Evaluaciones diferentes para cada etapa de aprendizaje. Todas tienen 18 preguntas y 20 minutos de tiempo continuo.</span><span class="home-mobile-title">Aquí sí cuentas con 20 minutos y un solo intento por evaluación. Selecciona tu etapa para comenzar.</span></p></div><div class="cards">
  ${[['nuevo','01','Antes de comenzar.','Un diagnóstico amable de conocimientos básicos y experiencia en restaurantes.'],['piso','02','Tu primer día.','Protocolos de atención, seguridad, trabajo en equipo y operación de mesas.'],['recurrente','03','Conoce SOMMO.','Ingredientes, gastronomía japonesa y coctelería de nuestra carta.']].map(([key,i,title,desc])=>`<article class="stage"><div><div class="stagehead"><span>${i} / EVALUACIÓN</span><span>18 PREGUNTAS</span></div><h3>${title}</h3><p>${desc}</p></div><button type="button" data-start="${key}">Comenzar evaluación</button></article>`).join('')}
  </div></div></section>
- <section class="academy-section"><div class="wrap academy-grid"><div><div class="eyebrow">02 / APRENDER ANTES DE EVALUAR</div><h2>El arte de<br><em>servir bien.</em></h2><p>Una guía breve y práctica para el equipo de piso. Mantener una mesa sin «muertos», pedir permiso antes de retirar y conocer la secuencia tradicional de servicio.</p><button class="academy-cta" data-page="manual">Leer el manual de servicio</button></div><div class="academy-note"><div class="lesson-item"><strong>01</strong><span>Mesa limpia, cómoda y sin objetos que ya no se utilizan.</span></div><div class="lesson-item"><strong>02</strong><span>Preguntar antes de retirar platos, vasos o utensilios.</span></div><div class="lesson-item"><strong>03</strong><span>Orden de servicio y atención personalizada a cada comensal.</span></div></div></div></section>`}
+ <section class="academy-section"><div class="wrap academy-grid"><div><div class="eyebrow">RECURSO COMPLEMENTARIO / SERVICIO</div><h2>El arte de<br><em>servir bien.</em></h2><p>Una guía breve y práctica para el equipo de piso. Mantener una mesa sin «muertos», pedir permiso antes de retirar y conocer la secuencia tradicional de servicio.</p><button class="academy-cta" data-page="manual">Leer el manual de servicio</button></div><div class="academy-note"><div class="lesson-item"><strong>01</strong><span>Mesa limpia, cómoda y sin objetos que ya no se utilizan.</span></div><div class="lesson-item"><strong>02</strong><span>Preguntar antes de retirar platos, vasos o utensilios.</span></div><div class="lesson-item"><strong>03</strong><span>Orden de servicio y atención personalizada a cada comensal.</span></div></div></div></section>`}
 
 function renderManual(){main.innerHTML=`<div class="wrap screen manual"><button class="back" data-page="home"> Volver al inicio</button><div class="eyebrow" style="margin-top:20px">ACADEMY / LECTURAS / 01</div><h1 class="intro-title">Protocolos<br><em>de servicio.</em></h1><p class="intro-lede">Una guía breve para mejorar el ritmo del servicio, la comodidad de los clientes y el trabajo en equipo. Este material es una propuesta para capacitación; no sustituye el protocolo interno aprobado por SOMMO.</p>
  <article class="article"><div class="eyebrow">MANUAL DE PISO · EDICIÓN 01</div><h2>La atención está<br>en los detalles.</h2><p>Un excelente servicio permite que el cliente disfrute la experiencia sin tener que solicitar cada cosa. Estar presente no significa interrumpir constantemente: significa observar, anticiparse y actuar con discreción.</p>
