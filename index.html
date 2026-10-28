@@ -15,6 +15,23 @@
 @media(max-width:850px){.hero{grid-template-columns:1fr;min-height:auto;padding-top:48px;gap:36px}.hero-media{min-height:440px}.hero-main h1{font-size:clamp(85px,16vw,126px)}.hero-caption{margin-top:45px}.cards{grid-template-columns:1fr}.stage{min-height:265px}.section-heading{display:block}.section-heading p{margin-top:22px}.academy-grid,.intro-panel{grid-template-columns:1fr}.academy-note{margin-top:18px}.top{min-height:77px}.mob-toggle{display:block}.nav{display:none;position:absolute;top:119px;left:0;right:0;background:#161a15;padding:20px 24px;border-bottom:1px solid #495149;flex-direction:column;align-items:stretch;z-index:10}.nav.open{display:flex}.nav button{text-align:left}.manager-stats{grid-template-columns:1fr 1fr}}
 @media(max-width:540px){.brand img{width:133px}.brand small{font-size:8px}.brand .separator{height:25px}.hero-main h1{font-size:clamp(76px,17vw,110px)}.hero-media{min-height:360px}.photo-copy{left:20px;bottom:22px}.section,.academy-section{padding-top:72px;padding-bottom:76px}.stage{padding:25px}.stage h3{font-size:48px}.screen{padding-top:36px;padding-bottom:65px}.results-hero{display:block;padding:26px}.score{margin-top:12px}.question-card h2{font-size:40px}.question-card{padding:26px 20px}.option{padding:17px 13px;font-size:13px}.foot{display:block;line-height:2.1}.exam-head{display:block}.exam-head .mono{display:block;margin-top:14px}.manager-stats{grid-template-columns:1fr}.actions-row{display:grid}.intro-panel{gap:13px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+/* V7.1 — gerencia: periodos y paginacion, mismos tonos editoriales */
+.manager-head{display:flex;align-items:end;justify-content:space-between;gap:25px;margin:32px 0 25px;border-bottom:1px solid #465043;padding-bottom:20px}
+.manager-head h2{font:400 clamp(45px,6vw,68px)/.92 var(--serif);letter-spacing:-.035em;margin:12px 0 0}
+.manager-head h2 em{color:#b8b2a6}.manager-head p{font-size:12px;line-height:1.8;color:#a7aea2;max-width:360px}
+.manager-filterbar{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:14px;align-items:end;background:#1b211b;padding:20px;border:1px solid #435043}
+.manager-filterbar .field{margin:0}.manager-filterbar input,.manager-filterbar select{width:100%}
+.manager-stats-four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.manager-stat b{overflow-wrap:anywhere}.manager-stat small{line-height:1.5;display:block}
+.manager-tablehead{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-top:40px;margin-bottom:16px}
+.manager-tablehead h3{font:400 46px var(--serif);margin:0}.manager-tablehead span{font:11px var(--mono);color:#aeb6a9}
+.manager-pages{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:18px;color:#aab2a6;font-size:12px}
+.manager-pages div{display:flex;gap:10px}.manager-pages button{background:transparent;color:#efede5;border:1px solid #687569;padding:11px 15px;min-width:105px}
+.manager-pages button:disabled{opacity:.35}.manager-exception #staffLookupHint{margin:8px 0;font-size:11px}
+@media(max-width:900px){.manager-filterbar{grid-template-columns:repeat(2,minmax(0,1fr))}.manager-stats-four{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.manager-head{display:block}.manager-filterbar{grid-template-columns:1fr}.manager-pages{align-items:stretch;flex-direction:column}.manager-pages div button{flex:1}.manager-tablehead{display:block}.manager-tablehead span{display:block;margin-top:8px}.manager-stats-four{grid-template-columns:repeat(2,minmax(0,1fr))}.manager-stat{padding:16px}.manager-stat b{font-size:38px}}
+
 </style>
 <style>
 /* V7 - acceso autonomo y reloj continuo */
@@ -33,10 +50,27 @@
 .manager-exception form{margin-top:26px;max-width:440px}
 @media(max-width:620px){.exam-head{display:flex;align-items:flex-start;gap:10px}.exam-head h1{font-size:31px!important}.clock-group{width:104px;height:104px}.clock-group svg{width:104px;height:104px}.clock-center strong{font-size:23px}.clock-center small{font-size:8px}}
 @media(max-width:540px){.foot span{display:block;margin-top:9px}}
+
+/* V7.1 — gerencia: periodos y paginacion, mismos tonos editoriales */
+.manager-head{display:flex;align-items:end;justify-content:space-between;gap:25px;margin:32px 0 25px;border-bottom:1px solid #465043;padding-bottom:20px}
+.manager-head h2{font:400 clamp(45px,6vw,68px)/.92 var(--serif);letter-spacing:-.035em;margin:12px 0 0}
+.manager-head h2 em{color:#b8b2a6}.manager-head p{font-size:12px;line-height:1.8;color:#a7aea2;max-width:360px}
+.manager-filterbar{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:14px;align-items:end;background:#1b211b;padding:20px;border:1px solid #435043}
+.manager-filterbar .field{margin:0}.manager-filterbar input,.manager-filterbar select{width:100%}
+.manager-stats-four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.manager-stat b{overflow-wrap:anywhere}.manager-stat small{line-height:1.5;display:block}
+.manager-tablehead{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-top:40px;margin-bottom:16px}
+.manager-tablehead h3{font:400 46px var(--serif);margin:0}.manager-tablehead span{font:11px var(--mono);color:#aeb6a9}
+.manager-pages{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:18px;color:#aab2a6;font-size:12px}
+.manager-pages div{display:flex;gap:10px}.manager-pages button{background:transparent;color:#efede5;border:1px solid #687569;padding:11px 15px;min-width:105px}
+.manager-pages button:disabled{opacity:.35}.manager-exception #staffLookupHint{margin:8px 0;font-size:11px}
+@media(max-width:900px){.manager-filterbar{grid-template-columns:repeat(2,minmax(0,1fr))}.manager-stats-four{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.manager-head{display:block}.manager-filterbar{grid-template-columns:1fr}.manager-pages{align-items:stretch;flex-direction:column}.manager-pages div button{flex:1}.manager-tablehead{display:block}.manager-tablehead span{display:block;margin-top:8px}.manager-stats-four{grid-template-columns:repeat(2,minmax(0,1fr))}.manager-stat{padding:16px}.manager-stat b{font-size:38px}}
+
 </style>
 </head>
 <body>
-<div class="topline">SOMMO / FORMACIÓN INTERNA · V7 PILOTO</div>
+<div class="topline">SOMMO / FORMACIÓN INTERNA · V7.1 PILOTO</div>
 <header class="wrap top">
   <a href="#inicio" class="brand" data-page="home" aria-label="SOMMO Academy inicio">
     <img src="https://cdn.prod.website-files.com/630a7f61ece7db6e1ffb2ff7/68484239fac612f59d2e4f58_Logos%20SOMMO-03%20Brand%20H%20beige.svg" alt="SOMMO Sushi Bar & Cocktails" onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMTAwIiB3aWR0aD0iNDAwIiBoZWlnaHQ9IjEwMCI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiMxMDExMGYiLz48dGV4dCB4PSI1IiB5PSI1MiIgZmlsbD0iI2VjZThkZSIgZm9udC1mYW1pbHk9IkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjYyIiBsZXR0ZXItc3BhY2luZz0iLTMiPlNPTU1PPC90ZXh0Pjx0ZXh0IHg9IjYiIHk9IjgyIiBmaWxsPSIjZWNlOGRlIiBmb250LWZhbWlseT0iQXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtc2l6ZT0iMTciIGxldHRlci1zcGFjaW5nPSIyIj5TVVNISSBCQVIgJmFtcDsgQ09DS1RBSUxTPC90ZXh0Pjwvc3ZnPgo='">
@@ -61,6 +95,23 @@
 .auth-error{color:#a12721;background:#ffe6de;padding:13px 16px;margin-top:15px;line-height:1.65}
 .auth-note{font-size:12px;line-height:1.8;color:#aaa99e}
 @media(max-width:600px){.accountbox{flex-direction:column;align-items:flex-start}}
+
+/* V7.1 — gerencia: periodos y paginacion, mismos tonos editoriales */
+.manager-head{display:flex;align-items:end;justify-content:space-between;gap:25px;margin:32px 0 25px;border-bottom:1px solid #465043;padding-bottom:20px}
+.manager-head h2{font:400 clamp(45px,6vw,68px)/.92 var(--serif);letter-spacing:-.035em;margin:12px 0 0}
+.manager-head h2 em{color:#b8b2a6}.manager-head p{font-size:12px;line-height:1.8;color:#a7aea2;max-width:360px}
+.manager-filterbar{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:14px;align-items:end;background:#1b211b;padding:20px;border:1px solid #435043}
+.manager-filterbar .field{margin:0}.manager-filterbar input,.manager-filterbar select{width:100%}
+.manager-stats-four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.manager-stat b{overflow-wrap:anywhere}.manager-stat small{line-height:1.5;display:block}
+.manager-tablehead{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-top:40px;margin-bottom:16px}
+.manager-tablehead h3{font:400 46px var(--serif);margin:0}.manager-tablehead span{font:11px var(--mono);color:#aeb6a9}
+.manager-pages{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:18px;color:#aab2a6;font-size:12px}
+.manager-pages div{display:flex;gap:10px}.manager-pages button{background:transparent;color:#efede5;border:1px solid #687569;padding:11px 15px;min-width:105px}
+.manager-pages button:disabled{opacity:.35}.manager-exception #staffLookupHint{margin:8px 0;font-size:11px}
+@media(max-width:900px){.manager-filterbar{grid-template-columns:repeat(2,minmax(0,1fr))}.manager-stats-four{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.manager-head{display:block}.manager-filterbar{grid-template-columns:1fr}.manager-pages{align-items:stretch;flex-direction:column}.manager-pages div button{flex:1}.manager-tablehead{display:block}.manager-tablehead span{display:block;margin-top:8px}.manager-stats-four{grid-template-columns:repeat(2,minmax(0,1fr))}.manager-stat{padding:16px}.manager-stat b{font-size:38px}}
+
 </style>
 <style>
 .save-status{margin:18px 0 0;color:#4b6950;font-family:var(--mono);font-size:11px;letter-spacing:.035em}
@@ -69,9 +120,26 @@
 .admin-grid input,.admin-grid select{min-width:0}
 .stage button:disabled{opacity:.7;cursor:not-allowed}
 @media(max-width:1000px){.admin-grid{grid-template-columns:1fr}}
+
+/* V7.1 — gerencia: periodos y paginacion, mismos tonos editoriales */
+.manager-head{display:flex;align-items:end;justify-content:space-between;gap:25px;margin:32px 0 25px;border-bottom:1px solid #465043;padding-bottom:20px}
+.manager-head h2{font:400 clamp(45px,6vw,68px)/.92 var(--serif);letter-spacing:-.035em;margin:12px 0 0}
+.manager-head h2 em{color:#b8b2a6}.manager-head p{font-size:12px;line-height:1.8;color:#a7aea2;max-width:360px}
+.manager-filterbar{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:14px;align-items:end;background:#1b211b;padding:20px;border:1px solid #435043}
+.manager-filterbar .field{margin:0}.manager-filterbar input,.manager-filterbar select{width:100%}
+.manager-stats-four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.manager-stat b{overflow-wrap:anywhere}.manager-stat small{line-height:1.5;display:block}
+.manager-tablehead{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-top:40px;margin-bottom:16px}
+.manager-tablehead h3{font:400 46px var(--serif);margin:0}.manager-tablehead span{font:11px var(--mono);color:#aeb6a9}
+.manager-pages{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:18px;color:#aab2a6;font-size:12px}
+.manager-pages div{display:flex;gap:10px}.manager-pages button{background:transparent;color:#efede5;border:1px solid #687569;padding:11px 15px;min-width:105px}
+.manager-pages button:disabled{opacity:.35}.manager-exception #staffLookupHint{margin:8px 0;font-size:11px}
+@media(max-width:900px){.manager-filterbar{grid-template-columns:repeat(2,minmax(0,1fr))}.manager-stats-four{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.manager-head{display:block}.manager-filterbar{grid-template-columns:1fr}.manager-pages{align-items:stretch;flex-direction:column}.manager-pages div button{flex:1}.manager-tablehead{display:block}.manager-tablehead span{display:block;margin-top:8px}.manager-stats-four{grid-template-columns:repeat(2,minmax(0,1fr))}.manager-stat{padding:16px}.manager-stat b{font-size:38px}}
+
 </style>
 <script>
-// SOMMO Academy V7 — la publishable key no es una credencial privada.
+// SOMMO Academy V7.1 — la publishable key no es una credencial privada.
 // Calificacion, bloqueo de reintentos y verificacion de identidad ocurren en Supabase.
 const SUPABASE_URL='https://rkhjvngwptnpmgekgopk.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_BTD-FrtW_os2J-4CHkTPrw_LKcIyVzb';
@@ -89,7 +157,8 @@ const siteUrl='https://webpagepxm.github.io/sommo-academy-v5/';
 sessionStorage.removeItem('sommo_staff_token_v62'); // cerrar token previo a la migracion
 let view='home',selectedExamType='nuevo',exam=null,latestResult=null,busy=false,
     staffToken=sessionStorage.getItem('sommo_staff_token_v7')||'',staffProfile=null,clockHandle=null,clockSyncing=false,clockOffset=0,
-    managerReady=false,recovering=false,managerData=null;
+    managerReady=false,recovering=false,managerData=null,
+    managerFilters={periodo:'30d',pagina:1,limite:25,busqueda:''},managerRequestSerial=0,managerSearchTimer=null,staffSearchTimer=null;
 function goTop(){window.scrollTo(0,0)}
 function setError(id,msg){const el=document.getElementById(id);if(el){el.textContent=msg;el.hidden=!msg}}
 function navState(){const el=document.getElementById('accountNav');if(el)el.textContent=staffProfile?'Mi evaluación':'Acceso personal';}
@@ -299,7 +368,7 @@ function renderManager(){
         const {error}=await client.auth.signInWithPassword({
          email:document.getElementById('adminEmail').value.trim(),password:document.getElementById('adminPass').value});
         if(error)throw error;
-        const {error:err}=await client.rpc('sommo_gerente_panel');if(err)throw err;
+        const {error:err}=await client.rpc('sommo_gerente_panel_v71',{p_periodo:'30d',p_pagina:1,p_limite:25,p_busqueda:''});if(err)throw err;
         managerReady=true;navigate('dashboard');
       }catch(ex){setError('adminError','No se pudo autorizar el acceso: '+(ex.message||String(ex)));}
       finally{busy=false;b.disabled=false;b.textContent='Entrar al panel ↗';}
@@ -308,28 +377,67 @@ function renderManager(){
 }
 async function loadManagerPanel(){
  const dest=document.getElementById('managerPanel');if(!dest)return;
- const {data,error}=await client.rpc('sommo_gerente_panel');if(view!=='dashboard')return;
- if(error){dest.innerHTML=`<p class="auth-error">${ESC(error.message)}. Verifica el rol privado de gerencia en Supabase.</p>`;return}
+ const request=++managerRequestSerial;
+ dest.innerHTML='<p class="auth-note">Consultando los resultados de Supabase…</p>';
+ const f={...managerFilters};
+ const {data,error}=await client.rpc('sommo_gerente_panel_v71',{
+   p_periodo:f.periodo,p_pagina:f.pagina,p_limite:f.limite,p_busqueda:f.busqueda
+ });
+ if(view!=='dashboard'||request!==managerRequestSerial||!document.getElementById('managerPanel'))return;
+ if(error){dest.innerHTML=`<p class="auth-error">${ESC(error.message)}. Revisa que hayas instalado el SQL V7.1 en Supabase.</p>`;return}
  managerData=data;
- const people=data.empleados||[],a=data.evaluaciones||[];
- const finished=a.filter(x=>x.estado==='finalizado'),progress=a.filter(x=>x.estado==='en_curso');
- const suspicious=people.filter(x=>x.posible_duplicado);
+ const a=data.evaluaciones||[],r=data.resumen||{},total=Number(data.total_filtrado||0),page=Number(data.pagina||1),limit=Number(data.limite||25);
+ const numPages=Math.max(1,Math.ceil(total/limit));
+ const begin=total?((page-1)*limit+1):0,end=Math.min(page*limit,total);
+ const intervalLabel=f.periodo==='30d'?'Últimos 30 días':f.periodo==='90d'?'Últimos 90 días':'Histórico completo';
  const period=new Date().toISOString().slice(0,7);
- dest.innerHTML=`<div class="manager-stats"><div class="manager-stat"><b>${people.length}</b><small>PERSONAL REGISTRADO</small></div><div class="manager-stat"><b>${finished.length}</b><small>EXÁMENES ENTREGADOS</small></div><div class="manager-stat"><b>${progress.length}</b><small>EN CURSO</small></div></div>
- <p class="manager-note">Los meseros se registran y presentan exámenes por su cuenta. La gerencia solo consulta resultados y, excepcionalmente, autoriza otra oportunidad.</p>
- ${suspicious.length?`<div class="manager-warning"><b>Revisar identidad:</b> ${suspicious.length} registro(s) con nombres repetidos. Los teléfonos no se verifican por SMS. ${suspicious.map(p=>ESC(p.nombre)).join(' · ')}</div>`:''}
- <h2 style="font:400 44px var(--serif);margin:40px 0 19px">Personal y resultados.</h2><div class="field" style="max-width:420px"><label for="managerSearch">Buscar por nombre</label><input id="managerSearch" placeholder="Nombre del mesero" autocomplete="off"></div>
- <div class="table-scroll"><table class="results-table"><thead><tr><th>EMPLEADO</th><th>EVALUACIÓN</th><th>ESTADO / INICIO</th><th>NOTA</th><th>REAPERTURAS</th></tr></thead><tbody>${a.map(x=>`<tr class="manager-result-row" data-staff-name="${ESC(x.nombre.toLocaleLowerCase('es'))}"><td><strong>${ESC(x.nombre)}</strong><br><span class="muted">${ESC((people.find(p=>p.id===x.empleado_id)||{}).telefono_final||'Teléfono no registrado')}</span></td><td>${ESC(TYPE(x.tipo))}<br><span class="muted">${ESC(x.periodo)} · #${x.numero}</span></td><td>${x.estado==='finalizado'?(x.motivo==='tiempo'?'Tiempo agotado':'Finalizado'):x.estado==='en_curso'?'En curso':'Pendiente'}${x.inicio?`<br><span class="muted">Inició ${ESC(formatDateTime(x.inicio))}</span>`:''}</td><td>${x.aciertos!==null?`${x.aciertos}/18 · ${Math.round(x.aciertos/18*100)}%`:'—'}</td><td>${Number(x.reanudaciones||0)}</td></tr>`).join('')||'<tr><td colspan="5">Todavía no hay evaluaciones.</td></tr>'}</tbody></table></div>
- <p class="auth-note">Reaperturas: veces que alguien volvió a abrir el mismo intento, incluso por recarga o por regresar después. No demuestra trampa.</p>
- <details class="manager-exception"><summary>Autorización excepcional de un nuevo intento</summary><form id="assignEmployee"><div class="field"><label>Empleado</label><select name="empleado" required><option value="">Selecciona</option>${people.map(p=>`<option value="${ESC(p.id)}">${ESC(p.nombre)}</option>`).join('')}</select></div><div class="field"><label>Evaluación</label><select name="tipo"><option value="ingreso">Nuevo ingreso</option><option value="piso">Primer día en piso</option><option value="recurrente">Recurrente</option></select></div><div class="field"><label>Periodo</label><input name="periodo" maxlength="32" value="${ESC(period)}" required></div><button class="wide-btn" type="submit">Autorizar otro intento ↗</button><p class="auth-error" id="assignError" hidden></p></form></details>
- <p class="auth-note" style="margin-top:20px">${data.modo_piloto?'PILOTO: Las 250 preguntas siguen pendientes de aprobación por SOMMO.':'Banco aprobado: verificar validaciones antes de operar.'} · Los teléfonos declarados no se comprueban por SMS.</p>`;
- document.getElementById('managerSearch')?.addEventListener('input',e=>{const q=e.target.value.toLocaleLowerCase('es').trim();document.querySelectorAll('.manager-result-row').forEach(row=>row.hidden=!row.dataset.staffName.includes(q))});
+ dest.innerHTML=`<div class="manager-head"><div><div class="eyebrow">RESULTADOS / SOMMO ACADEMY</div><h2>El equipo,<br><em>en perspectiva.</em></h2></div><p>Elige un periodo para consultar las evaluaciones. Los resultados antiguos se conservan en Supabase.</p></div>
+ <div class="manager-filterbar"><div class="field"><label for="managerPeriod">Periodo</label><select id="managerPeriod"><option value="30d" ${f.periodo==='30d'?'selected':''}>Últimos 30 días</option><option value="90d" ${f.periodo==='90d'?'selected':''}>Últimos 90 días</option><option value="historico" ${f.periodo==='historico'?'selected':''}>Histórico completo</option></select></div><div class="field"><label for="managerSearch">Buscar por nombre</label><input type="search" id="managerSearch" value="${ESC(f.busqueda)}" placeholder="Nombre del mesero" autocomplete="off" maxlength="80"></div><div class="field"><label for="managerLimit">Filas por página</label><select id="managerLimit"><option value="25" ${limit===25?'selected':''}>25 resultados</option><option value="50" ${limit===50?'selected':''}>50 resultados</option></select></div></div>
+ <div class="manager-stats manager-stats-four"><div class="manager-stat"><b>${Number(data.personal_total||0)}</b><small>PERSONAL REGISTRADO · TOTAL</small></div><div class="manager-stat"><b>${Number(r.finalizados||0)}</b><small>FINALIZADOS · ${ESC(intervalLabel.toUpperCase())}</small></div><div class="manager-stat"><b>${Number(r.en_curso||0)}</b><small>EN CURSO · PERIODO</small></div><div class="manager-stat"><b>${r.promedio===null||r.promedio===undefined?'—':Number(r.promedio)+'%'}</b><small>PROMEDIO · FINALIZADOS</small></div></div>
+ <p class="manager-note">${ESC(intervalLabel)} · ${Number(r.pendientes||0)} evaluaciones pendientes · ${Number(r.total||0)} evaluaciones en el periodo. El buscador filtra los resultados por nombre sin alterar estas métricas generales.</p>
+ ${Number(data.nombres_repetidos||0)>0?`<div class="manager-warning"><b>Revisión de identidad:</b> Hay ${Number(data.nombres_repetidos)} grupo(s) de nombres repetidos en el personal. Sin SMS, el teléfono declarado no constituye verificación de identidad.</div>`:''}
+ <div class="manager-tablehead"><h3>Evaluaciones.</h3><span>${begin}–${end} de ${total} registros encontrados</span></div>
+ <div class="table-scroll"><table class="results-table"><thead><tr><th>EMPLEADO</th><th>EVALUACIÓN</th><th>ESTADO / INICIO</th><th>NOTA</th><th>REAPERTURAS</th></tr></thead><tbody>${a.map(x=>`<tr><td><strong>${ESC(x.nombre)}</strong><br><span class="muted">${ESC(x.telefono_final||'Teléfono no registrado')}</span></td><td>${ESC(TYPE(x.tipo))}<br><span class="muted">${ESC(x.periodo)} · #${Number(x.numero||1)}</span></td><td>${x.estado==='finalizado'?(x.motivo==='tiempo'?'Tiempo agotado':'Finalizado'):x.estado==='en_curso'?'En curso':'Pendiente'}${x.inicio?`<br><span class="muted">Inició ${ESC(formatDateTime(x.inicio))}</span>`:''}</td><td>${x.aciertos!==null&&x.aciertos!==undefined?`${Number(x.aciertos)}/18 · ${Math.round(Number(x.aciertos)/18*100)}%`:'—'}</td><td>${Number(x.reanudaciones||0)}</td></tr>`).join('')||'<tr><td colspan="5" class="empty">No hay evaluaciones para este periodo y búsqueda.</td></tr>'}</tbody></table></div>
+ <div class="manager-pages"><span>Página ${page} de ${numPages} · se muestran máximo ${limit} registros por consulta</span><div><button type="button" id="managerPrev" ${page<=1?'disabled':''}>← Anterior</button><button type="button" id="managerNext" ${page>=numPages?'disabled':''}>Siguiente →</button></div></div>
+ <p class="auth-note">Reaperturas = veces que alguien volvió a abrir el mismo intento. Una recarga o falla de conexión también cuenta: no demuestra trampa.</p>
+ <details class="manager-exception"><summary>Autorización excepcional de un nuevo intento</summary><form id="assignEmployee"><div class="field"><label for="staffLookup">Buscar empleado para autorizar</label><input type="search" id="staffLookup" maxlength="80" placeholder="Escribe su nombre" autocomplete="off"><p class="auth-note" id="staffLookupHint">Mostrando los primeros 30 empleados activos por orden alfabético.</p></div><div class="field"><label for="staffOption">Empleado</label><select id="staffOption" name="empleado" required><option value="">Cargando personal…</option></select></div><div class="field"><label>Evaluación</label><select name="tipo"><option value="ingreso">Nuevo ingreso</option><option value="piso">Primer día en piso</option><option value="recurrente">Recurrente</option></select></div><div class="field"><label>Periodo</label><input name="periodo" maxlength="32" value="${ESC(period)}" required></div><button class="wide-btn" type="submit">Autorizar otro intento ↗</button><p class="auth-error" id="assignError" hidden></p></form></details>
+ <p class="auth-note" style="margin-top:20px">${data.modo_piloto?'PILOTO: las preguntas siguen pendientes de aprobación por SOMMO.':'Antes de uso formal, confirma la revisión del banco.'} Los datos históricos no se eliminan automáticamente; SOMMO debe aprobar una política de conservación antes de activar una depuración.</p>`;
+ document.getElementById('managerPeriod')?.addEventListener('change',e=>{managerFilters.periodo=e.target.value;managerFilters.pagina=1;loadManagerPanel()});
+ document.getElementById('managerLimit')?.addEventListener('change',e=>{managerFilters.limite=Number(e.target.value);managerFilters.pagina=1;loadManagerPanel()});
+ document.getElementById('managerSearch')?.addEventListener('input',e=>{
+   const s=e.target.value;clearTimeout(managerSearchTimer);
+   managerSearchTimer=setTimeout(()=>{managerFilters.busqueda=s.trim();managerFilters.pagina=1;loadManagerPanel()},450);
+ });
+ document.getElementById('managerPrev')?.addEventListener('click',()=>{managerFilters.pagina=Math.max(1,managerFilters.pagina-1);loadManagerPanel()});
+ document.getElementById('managerNext')?.addEventListener('click',()=>{managerFilters.pagina=Math.min(numPages,managerFilters.pagina+1);loadManagerPanel()});
+ const details=dest.querySelector('.manager-exception');
+ details?.addEventListener('toggle',()=>{if(details.open){loadStaffManagerOptions('')}});
+ document.getElementById('staffLookup')?.addEventListener('input',e=>{
+   const lookup=e.target.value;clearTimeout(staffSearchTimer);
+   staffSearchTimer=setTimeout(()=>loadStaffManagerOptions(lookup),350);
+ });
  document.getElementById('assignEmployee')?.addEventListener('submit',async e=>{
-   e.preventDefault();if(busy)return;busy=true;const form=e.currentTarget,b=form.querySelector('[type="submit"]');b.disabled=true;
+   e.preventDefault();if(busy)return;busy=true;
+   const form=e.currentTarget,b=form.querySelector('[type="submit"]');b.disabled=true;
    setError('assignError','');try{
-     const {error}=await client.rpc('sommo_gerente_asignar',{p_empleado:form.elements.empleado.value,p_tipo:form.elements.tipo.value,p_periodo:form.elements.periodo.value.trim()});if(error)throw error;await loadManagerPanel();
+     const {error}=await client.rpc('sommo_gerente_asignar',{p_empleado:form.elements.empleado.value,p_tipo:form.elements.tipo.value,p_periodo:form.elements.periodo.value.trim()});
+     if(error)throw error;await loadManagerPanel();
    }catch(err){setError('assignError',err.message||'No se pudo asignar');b.disabled=false}finally{busy=false}
  });
+}
+let managerStaffSerial=0;
+async function loadStaffManagerOptions(busqueda){
+ const id=++managerStaffSerial;
+ const sel=document.getElementById('staffOption'),hint=document.getElementById('staffLookupHint');
+ if(!sel)return;
+ sel.innerHTML='<option value="">Buscando…</option>';
+ const {data,error}=await client.rpc('sommo_gerente_buscar_personal_v71',{p_busqueda:busqueda.trim(),p_limite:30});
+ if(id!==managerStaffSerial||!document.getElementById('staffOption'))return;
+ const current=document.getElementById('staffOption');
+ if(error){current.innerHTML='<option value="">No se pudo consultar el personal</option>';if(hint)hint.textContent=error.message;return}
+ const people=data?.empleados||[];
+ current.innerHTML='<option value="">Selecciona un empleado</option>'+people.map(p=>`<option value="${ESC(p.id)}">${ESC(p.nombre)}${p.telefono_final?' · '+ESC(p.telefono_final):''}</option>`).join('');
+ if(hint)hint.textContent=people.length===30?'Se muestran hasta 30 coincidencias. Escribe más letras para afinar.':`${people.length} empleado(s) encontrado(s).`;
 }
 function renderRecover(){
  main.innerHTML=`<div class="wrap screen"><button class="back" data-page="dashboard">← Acceso gerencial</button><div class="eyebrow">GERENCIA / RECUPERACIÓN</div><h1 class="intro-title">Recuperar<br><em>contraseña.</em></h1><div class="panel" style="max-width:550px"><form id="recoverForm"><div class="field"><label>Correo registrado en Supabase Authentication</label><input id="recoverEmail" type="email" required></div><button class="wide-btn" type="submit">Enviar enlace de recuperación ↗</button><p class="auth-error" id="recoverError" hidden></p><p class="auth-note">El envío de correos está sujeto al límite de Supabase. El enlace debe apuntar a esta web en Authentication → URL Configuration.</p></form></div></div>`;
@@ -386,7 +494,7 @@ mob.addEventListener('click',()=>{const open=nav.classList.toggle('open');mob.se
    const {data}=await client.auth.getSession();
    if(data.session){
      if(recovering || /type=recovery/.test(currentHash)){recovering=true;navigate('reset');return}
-     const {error}=await client.rpc('sommo_gerente_panel');
+     const {error}=await client.rpc('sommo_gerente_panel_v71',{p_periodo:'30d',p_pagina:1,p_limite:25,p_busqueda:''});
      if(!error)managerReady=true;
    }
  }catch(e){console.warn('No se pudo revisar la sesión gerencial',e)}
