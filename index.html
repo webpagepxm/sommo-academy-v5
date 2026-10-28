@@ -291,6 +291,97 @@ button{ -webkit-appearance:none; appearance:none; -webkit-tap-highlight-color:tr
  .stagehead span:last-child{text-align:right}
 }
 
+
+
+/* SOMMO Academy V8.3 — Legibilidad en móvil.
+   Partimos íntegramente de V8.2: solo aumentamos textos de lectura,
+   apoyos y controles. Titulares y lógica de exámenes se conservan. */
+@media (max-width: 600px) {
+  /* Lectura editorial: bloques y párrafos, no encabezados. */
+  .quickstart-heading p,
+  .quick-option p,
+  .paper .section-heading p,
+  .lede,
+  .section-heading p,
+  .stage p,
+  .academy-section p,
+  .screen .intro-lede,
+  .article p,
+  .article li,
+  .study-home-section p,
+  .study-detail,
+  .study-hint,
+  .study-note,
+  .review details p,
+  .manager-head p,
+  .result-note,
+  .result-meta {
+    font-size: 18px;
+    line-height: 1.72;
+  }
+
+  /* Instrucciones auxiliares: lectura clara con jerarquía. */
+  .lesson-item span,
+  .tip,
+  .checkline,
+  .study-guidance,
+  .study-disclaimer,
+  .study-count span,
+  .study-footer p,
+  .manager-warning,
+  .manager-stat small,
+  .manager-pages,
+  .manager-tablehead span,
+  .empty {
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  .checkline { align-items: flex-start; }
+  .study-count span { line-height: 1.6; }
+
+  /* Opciones y acciones con texto legible al tacto. */
+  .quick-option button,
+  .option,
+  .study-tab,
+  .study-mark-actions button,
+  .study-pager button,
+  .stage button,
+  .academy-cta,
+  .wide-btn,
+  .exam-actions button,
+  .actions-row button,
+  .manager-pages button,
+  .text-btn,
+  .nav button {
+    font-size: 16px;
+    line-height: 1.45;
+  }
+  .option { gap: 14px; padding: 18px 16px; }
+  .study-tab { padding: 17px 18px; }
+  .wide-btn { padding: 15px 18px; }
+
+  /* Formularios: 16px evita el zoom automático al escribir en iPhone. */
+  .field label,
+  .study-controls label {
+    font-size: 14px;
+    line-height: 1.5;
+    letter-spacing: .025em;
+  }
+  .field input, .field select,
+  .study-controls select, .study-controls input {
+    font-size: 16px;
+  }
+
+  /* Información tabular, etiquetas y notas secundarias. */
+  .results-table td { font-size: 14px; line-height: 1.5; }
+  .results-table th { font-size: 12px; line-height: 1.4; }
+  .study-keywords span { font-size: 12px; line-height: 1.4; }
+  .study-footer a { font-size: 14px; }
+  .study-home-grid button small { font-size: 12px; }
+  .study-turn { font-size: 12px; }
+  .study-card-meta { font-size: 11px; line-height: 1.45; }
+}
+
 </style>
 <script>
 // SOMMO Academy V8.2 — la publishable key no es una credencial privada.
